@@ -29,6 +29,7 @@
 
 ```bash
 $ pnpm install
+$ npx husky install
 ```
 
 ## Compile and run the project
