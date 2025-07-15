@@ -1,54 +1,36 @@
+import { Injectable } from '@nestjs/common';
+import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
-import { TypeOrmModuleOptions as Options } from '@nestjs/typeorm';
-import { DATABASE, PROJECT } from '@/shared/infrastructure/config';
-import { IDatabase } from '@/shared/domain/database/interface.database';
-export type { Options };
 
-export class PostgresDatabase implements IDatabase<Options> {
-  private readonly database: typeof DATABASE.postgresql;
-  private readonly project: typeof PROJECT;
-  private static instance: IDatabase<Options> | undefined;
+@Injectable()
+export class DatabaseConfigService implements TypeOrmOptionsFactory {
+  private readonly isProduction: boolean;
 
-  constructor() {
-    this.database = DATABASE.postgresql;
-    this.project = PROJECT;
+  constructor(private readonly config: ConfigService) {
+    this.isProduction = config.get<string>('PROJECT_MODE') == 'production';
   }
 
-  /**
-   * Singleton pattern to ensure only one instance of PostgresDatabase is created.
-   * @returns {IDatabase<Options>} The singleton instance of PostgresDatabase.
-   */
-  static getInstance(): IDatabase<Options> {
-    if (this.instance) return this.instance;
-    this.instance = new PostgresDatabase();
-    return this.instance;
-  }
-
-  public getDatabaseConfig(): Options {
-    console.info(this.database);
+  createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
-      host: this.database.host,
-      port: +this.database.port,
-      username: this.database.user,
-      password: this.database.password,
-      database: this.database.database,
+      host: this.config.get('POSTGRES_HOST'),
+      port: +this.config.get<number>('POSTGRES_PORT')!,
+      username: this.config.get('POSTGRES_USER'),
+      password: this.config.get('POSTGRES_PASSWORD'),
+      database: this.config.get('POSTGRES_DB'),
       entities: [
-        !this.project.production ? 'src/**/*.entity.ts' : 'dist/**/*.entity.js',
+        this.isProduction ? 'dist/**/*.entity.js' : 'src/**/*.entity.ts',
       ],
       migrations: [
-        join(
-          process.cwd(),
-          'migrations',
-          !this.project.production ? '*.ts' : '*.js',
-        ),
+        join(process.cwd(), 'migrations', this.isProduction ? '*.js' : '*.ts'),
       ],
-      logging: this.database.logging ? 'all' : false,
-      maxQueryExecutionTime: 2000,
-      //ssl: !this.database.logging,
-      ssl: false,
       migrationsTableName: 'typeorm_migrations',
+      logging:
+        this.config.get('PROJECT_MODE') === 'development' ? 'all' : false,
+      maxQueryExecutionTime: 2000,
       synchronize: false,
+      ssl: false,
     };
   }
 }
