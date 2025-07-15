@@ -1,0 +1,27 @@
+# .husky/prepare-commit-msg
+#!/usr/bin/env bash
+set -euo pipefail
+
+COMMIT_MSG_FILE="$1"
+COMMIT_SOURCE="${2:-}"        
+TEAM_CODE="ECV"
+
+case "$COMMIT_SOURCE" in
+  ""|"message"|"merge"|"squash") ;;   # OK
+  *) exit 0 ;;                        # template, commit, rewrite… => ignorar
+esac
+
+BRANCH="$(git symbolic-ref --quiet --short HEAD || true)"
+[[ -z "$BRANCH" || "$BRANCH" == "HEAD" ]] && exit 0
+
+if [[ "$BRANCH" =~ (^|[/-])(${TEAM_CODE}-[0-9]+)([/-]|$) ]]; then
+  ISSUE="${BASH_REMATCH[2]}"
+else
+  echo "❌  The branch name '$BRANCH' does not match the required pattern."
+  echo "   Rename your branch to match the pattern: <type>/<teamCode>-<number>-<description>"
+  exit 1
+fi
+
+if ! grep -qE "^\[?$ISSUE\]?[[:space:]]" "$COMMIT_MSG_FILE"; then
+  sed -i.bak -e "1s|^|[$ISSUE] |" "$COMMIT_MSG_FILE" && rm "$COMMIT_MSG_FILE.bak"
+fi
