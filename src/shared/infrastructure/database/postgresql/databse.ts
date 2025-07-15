@@ -1,15 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { join } from 'path';
 
 @Injectable()
 export class DatabaseConfigService implements TypeOrmOptionsFactory {
-  private readonly isProduction: boolean;
-
-  constructor(private readonly config: ConfigService) {
-    this.isProduction = config.get<string>('PROJECT_MODE') == 'production';
-  }
+  constructor(private readonly config: ConfigService) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
@@ -19,12 +14,8 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
       username: this.config.get('POSTGRES_USER'),
       password: this.config.get('POSTGRES_PASSWORD'),
       database: this.config.get('POSTGRES_DB'),
-      entities: [
-        this.isProduction ? 'dist/**/*.entity.js' : 'src/**/*.entity.ts',
-      ],
-      migrations: [
-        join(process.cwd(), 'migrations', this.isProduction ? '*.js' : '*.ts'),
-      ],
+      entities: ['dist/**/*.entity.js'],
+      migrations: ['dist/migrations/*.js'],
       migrationsTableName: 'typeorm_migrations',
       logging:
         this.config.get('PROJECT_MODE') === 'development' ? 'all' : false,
