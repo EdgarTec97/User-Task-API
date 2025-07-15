@@ -18,13 +18,13 @@ case "$ACTION" in
   generate)
     [[ -z $NAME ]] && { echo "❌  Falta nombre de migración"; exit 1; }
 
-    npm run migration:generate -- "$MIGR_DIR/$NAME"
+    TS_NODE=true npm run migration:generate -- "$MIGR_DIR/$NAME"
     ;;
   up)
-    npm run migration:run
+    TS_NODE=true npm run migration:run
     ;;
   down)
-    npm run migration:revert
+    TS_NODE=true npm run migration:revert
     ;;
   *)
     echo "Uso: migrate {generate|up|down} [Name]"
@@ -32,4 +32,4 @@ case "$ACTION" in
     ;;
 esac
 
-echo "✔  Acción '$ACTION' completada"
+echo "✔  Action '$ACTION' completed successfully."

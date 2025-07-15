@@ -1,6 +1,6 @@
 import { Module, Global } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DatabseInstance } from '@/shared/infrastructure/database/postgresql/databse';
+import { DatabseInstance } from '@/shared/infrastructure/database/postgresql';
 
 @Global()
 @Module({

@@ -3,6 +3,10 @@ declare const process: { env: Record<string, string> };
 export const PROJECT = {
   name: process.env.PROJECT_NAME,
   port: process.env.PROJECT_PORT,
+  production:
+    !process.env.TS_NODE ||
+    process.env.NODE_ENV == 'production' ||
+    process.env.PROJECT_MODE == 'production',
 };
 
 export const DATABASE = {

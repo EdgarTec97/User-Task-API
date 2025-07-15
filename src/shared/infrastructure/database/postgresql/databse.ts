@@ -1,14 +1,17 @@
 import { join } from 'path';
 import { TypeOrmModuleOptions as Options } from '@nestjs/typeorm';
-import { DATABASE } from '@/shared/infrastructure/config';
+import { DATABASE, PROJECT } from '@/shared/infrastructure/config';
 import { IDatabase } from '@/shared/domain/database/interface.database';
+export type { Options };
 
-class PostgresDatabase implements IDatabase<Options> {
+export class PostgresDatabase implements IDatabase<Options> {
   private readonly database: typeof DATABASE.postgresql;
+  private readonly project: typeof PROJECT;
   private static instance: IDatabase<Options> | undefined;
 
   constructor() {
     this.database = DATABASE.postgresql;
+    this.project = PROJECT;
   }
 
   /**
@@ -22,6 +25,7 @@ class PostgresDatabase implements IDatabase<Options> {
   }
 
   public getDatabaseConfig(): Options {
+    console.info(this.database);
     return {
       type: 'postgres',
       host: this.database.host,
@@ -29,8 +33,16 @@ class PostgresDatabase implements IDatabase<Options> {
       username: this.database.user,
       password: this.database.password,
       database: this.database.database,
-      entities: [join(__dirname, '..', '**', '*.entity.{ts,js}')],
-      migrations: [join(__dirname, '..', 'migrations', '*.{ts,js}')],
+      entities: [
+        !this.project.production ? 'src/**/*.entity.ts' : 'dist/**/*.entity.js',
+      ],
+      migrations: [
+        join(
+          process.cwd(),
+          'migrations',
+          !this.project.production ? '*.ts' : '*.js',
+        ),
+      ],
       logging: this.database.logging ? 'all' : false,
       maxQueryExecutionTime: 2000,
       //ssl: !this.database.logging,
@@ -40,5 +52,3 @@ class PostgresDatabase implements IDatabase<Options> {
     };
   }
 }
-
-export const DatabseInstance = PostgresDatabase.getInstance();

@@ -2,6 +2,8 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { join } from 'path';
 
+const isTs: boolean = Boolean(process.env.TS_NODE);
+
 export default new DataSource({
   type: 'postgres',
   host: process.env.POSTGRES_HOST,
@@ -9,7 +11,8 @@ export default new DataSource({
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
-  entities: [join(__dirname, '..', '**', '*.entity.{ts,js}')],
-  migrations: [join(__dirname, '..', 'migrations', '*.{ts,js}')],
+  entities: [isTs ? 'src/**/*.entity.ts' : 'dist/**/*.entity.js'],
+  migrations: [join(process.cwd(), 'migrations', isTs ? '*.ts' : '*.js')],
+
   migrationsTableName: 'typeorm_migrations',
 });
