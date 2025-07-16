@@ -19,45 +19,33 @@ export class UserTypeOrmRepository implements IUserRepository {
 
   async login(email: string, password: string): Promise<DomainUser | void> {
     const user: User | null = await this.ormRepo.findOne({ where: { email, password } });
-    if (user)
-      DomainUser.fromPrimitives({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        createdAt: user.createdAt.toISOString(),
-        updatedAt: user.updatedAt.toISOString(),
-      });
+    if (user) return this.toDomainUser(user);
   }
 
   async findById(id: string): Promise<DomainUser | void> {
     const user: User | null = await this.ormRepo.findOne({ where: { id } });
 
-    if (user)
-      DomainUser.fromPrimitives({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        createdAt: user.createdAt.toISOString(),
-        updatedAt: user.updatedAt.toISOString(),
-      });
+    if (user) return this.toDomainUser(user);
   }
 
   async findByEmail(email: string): Promise<DomainUser | void> {
     const user: User | null = await this.ormRepo.findOne({ where: { email } });
-    if (user)
-      DomainUser.fromPrimitives({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        createdAt: user.createdAt.toISOString(),
-        updatedAt: user.updatedAt.toISOString(),
-      });
+    if (user) return this.toDomainUser(user);
   }
 
   async delete(id: string): Promise<void> {
     await this.ormRepo.delete(id);
+  }
+
+  private toDomainUser(user: User): DomainUser {
+    return DomainUser.fromPrimitives({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      role: user.role,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
+    });
   }
 }

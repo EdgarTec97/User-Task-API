@@ -1,8 +1,8 @@
-import { randomUUID } from 'crypto';
+import { v4 } from 'uuid';
 
 export class Generate {
   static uuid(): string {
-    return randomUUID();
+    return v4() as string;
   }
   static currentDate(): string {
     return new Date().toISOString();
