@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  app:
+    profiles: [app]
+    container_name: api_${PROJECT_NAME}
+    build:
+      context: .
+      dockerfile: Dockerfile # the optimised multi‑stage Dockerfile
+    depends_on:
+      - postgres
+    networks: [users-api]
+
+    ports:
+      - '${PROJECT_PORT}:${PROJECT_PORT}'
+
   postgres:
     container_name: postgres_${PROJECT_NAME}
     image: postgres:14.5-alpine
