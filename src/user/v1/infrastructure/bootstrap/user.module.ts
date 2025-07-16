@@ -6,7 +6,7 @@ import { User } from '@/user/v1/infrastructure/entities/user.entity';
 import { USER_REPOSITORY } from '@/user/v1/domain/ports/user.repository';
 import { UserTypeOrmRepository } from '@/user/v1/infrastructure/repositories/user.typeorm.repository';
 import { UserCreateUseCase } from '@/user/v1/application/use-cases/use-create.use-case';
-import { CreateUserController } from '@/user/v1/infrastructure/controllers/create-user.controller';
+import { CreateUserController } from '@/user/v1/gateway/controllers/create-user.controller';
 
 import { JWT_SERVICE_TOKEN } from '@/shared/domain/jwt/JwtService';
 import { JwtServiceNest } from '@/shared/infrastructure/jwt/bootstrap/JwtServiceNest';
