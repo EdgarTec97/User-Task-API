@@ -41,7 +41,7 @@ COPY package.json pnpm-lock.yaml ./
 COPY --from=deps /app/node_modules ./node_modules
 
 # Remove devDependencies
-RUN pnpm prune --prod
+RUN pnpm prune --prod --ignore-scripts
 
 ###############################################################################
 # 5) runtime – minimal, non‑root, prod deps + compiled code                   #
