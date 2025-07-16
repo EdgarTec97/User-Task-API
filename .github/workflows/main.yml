@@ -1,13 +1,14 @@
 name: CI
 
 on:
-  pull_request:
-    branches: [main, develop]
-    types: [opened, reopened, synchronize, ready_for_review]
+  push:
+    branches:
+      - main
+      - develop
 
 jobs:
   tests:
-    if: ${{ github.event.pull_request.draft == false }}
+    name: Lint & Test
     runs-on: ubuntu-latest
     container: node:20.1.0
     timeout-minutes: 15
