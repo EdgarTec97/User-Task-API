@@ -14,5 +14,5 @@ export abstract class SingleValueObject<T> {
     return this.value === SingleValueObject.value;
   }
 
-  abstract validate(): boolean;
+  abstract validate(): boolean; // You can implement logic for boolean validation or throw an error
 }

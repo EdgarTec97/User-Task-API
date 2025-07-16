@@ -5,6 +5,8 @@ export type JwtPayload = {
   exp: number;
   sub: string;
   role: Role;
+  email: string;
+  name: string;
   accessTokenRole?: Role;
 };
 

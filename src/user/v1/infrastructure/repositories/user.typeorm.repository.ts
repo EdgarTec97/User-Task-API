@@ -1,4 +1,3 @@
-// src/user/infrastructure/repositories/user-typeorm.repository.ts
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,11 +14,6 @@ export class UserTypeOrmRepository implements IUserRepository {
 
   async save(user: UserPrimitives): Promise<void> {
     await this.ormRepo.save(user);
-  }
-
-  async login(email: string, password: string): Promise<DomainUser | void> {
-    const user: User | null = await this.ormRepo.findOne({ where: { email, password } });
-    if (user) return this.toDomainUser(user);
   }
 
   async findById(id: string): Promise<DomainUser | void> {

@@ -5,7 +5,7 @@ import { UserCreateUseCase } from '@/user/v1/application/use-cases/use-create.us
 import { DocumentationTags, Endpoint } from '@/shared/infrastructure/utils/Endpoint';
 import { UserDTO } from '@/user/v1/gateway/dtos/user.dto';
 import { StatusResponseDTO } from '@/shared/infrastructure/meta/dtos/StatusResponseDTO';
-import { Generate } from '@/shared/infrastructure/utils/generate';
+import { GeneralUtils } from '@/shared/infrastructure/utils/generate';
 import { Role } from '@/shared/domain/jwt/Role';
 
 @Controller()
@@ -23,15 +23,16 @@ export class CreateUserController {
     description: 'User data to create a record',
   })
   @Post('api/v1/user')
-  async createStudent(@Body() { name, email, password, id, role }: UserDTO): Promise<StatusResponseDTO> {
+  async createUser(@Body() { name, email, password, id, role }: UserDTO): Promise<StatusResponseDTO> {
+    const date = GeneralUtils.currentDate();
     const domain: User = User.fromPrimitives({
-      id: id || Generate.uuid(),
+      id: id || GeneralUtils.uuid(),
       name,
       email,
       password,
       role: role || Role.MEMBER,
-      createdAt: Generate.currentDate(),
-      updatedAt: Generate.currentDate(),
+      createdAt: date,
+      updatedAt: date,
     });
 
     await this.useCase.execute(domain);

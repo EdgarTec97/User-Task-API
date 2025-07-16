@@ -4,12 +4,19 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from '@/user/v1/infrastructure/bootstrap/user.module';
 import { LoggingModule } from '@/shared/infrastructure/logging/logging.module';
 import { DatabaseModule } from '@/shared/infrastructure/database/module';
+import { CryptoModule } from '@/shared/infrastructure/encryption/encryption.module';
 import { HttpExceptionFilterLogger } from '@/shared/infrastructure/error-handling/boilerplate/HttpExceptionFilterLogger';
 import { GlobalErrorsInterceptor } from '@/shared/infrastructure/error-handling/boilerplate/GlobalErrorsInterceptor';
 import { DomainToInfrastructureMapper } from '@/shared/infrastructure/error-handling/DomainToInfrastructureMap';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true, cache: true }), LoggingModule, DatabaseModule, UserModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true, cache: true }),
+    LoggingModule,
+    CryptoModule,
+    DatabaseModule,
+    UserModule,
+  ],
   providers: [
     {
       provide: APP_INTERCEPTOR,
