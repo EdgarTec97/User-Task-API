@@ -12,4 +12,6 @@ export abstract class AggregateRoot {
     this.events = [];
     return events;
   }
+
+  abstract toPrimitives(): Record<string, string | number | boolean | undefined>;
 }

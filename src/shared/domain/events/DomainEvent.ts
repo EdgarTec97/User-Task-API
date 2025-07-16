@@ -10,6 +10,6 @@ export abstract class DomainEvent {
   }
 
   toPrimitives(): { id: string } {
-    return { id: this.id.getValue() };
+    return { id: this.id.valueOf() };
   }
 }

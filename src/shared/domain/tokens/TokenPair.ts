@@ -11,8 +11,8 @@ export class TokenPair extends ValueObject {
 
   toPrimitives() {
     return {
-      accessToken: this.accessToken.getValue(),
-      refreshToken: this.refrestToken.getValue(),
+      accessToken: this.accessToken.valueOf(),
+      refreshToken: this.refrestToken.valueOf(),
     };
   }
 }

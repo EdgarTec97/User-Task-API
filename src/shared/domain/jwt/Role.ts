@@ -1,7 +1,7 @@
 export enum Role {
-  MEMBER = 'member',
-  ADMIN = 'admin',
-  REFRESH_TOKEN = 'refresh_token',
+  MEMBER = 'MEMBER',
+  ADMIN = 'ADMIN',
+  REFRESH_TOKEN = 'REFRESH_TOKEN',
 }
 
 export const ALL_ROLES = Object.values(Role);

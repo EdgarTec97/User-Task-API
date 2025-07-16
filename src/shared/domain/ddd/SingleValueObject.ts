@@ -3,13 +3,16 @@ export abstract class SingleValueObject<T> {
 
   constructor(value: T) {
     this.value = value;
+    this.validate();
   }
 
-  getValue(): T {
+  valueOf(): T {
     return this.value;
   }
 
   equals(SingleValueObject: SingleValueObject<T>): boolean {
     return this.value === SingleValueObject.value;
   }
+
+  abstract validate(): boolean;
 }

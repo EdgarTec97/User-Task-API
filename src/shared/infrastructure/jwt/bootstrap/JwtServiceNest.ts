@@ -10,7 +10,7 @@ export class JwtServiceNest implements IJwtService {
   constructor(private readonly jwtService: JwtService) {}
 
   private createRefreshToken(refreshToken: AccessToken): AccessToken {
-    const { role, sub } = this.jwtService.decode<JwtPayload>(refreshToken.getValue());
+    const { role, sub } = this.jwtService.decode<JwtPayload>(refreshToken.valueOf());
 
     const jwt: string = this.jwtService.sign(
       { accessTokenRole: role, role: Role.REFRESH_TOKEN, sub },
@@ -25,7 +25,7 @@ export class JwtServiceNest implements IJwtService {
   public sign(uuid: UUID, role: Role): AccessToken {
     const payload = {
       role,
-      sub: uuid.getValue(),
+      sub: uuid.valueOf(),
     };
     const jwt: string = this.jwtService.sign(payload);
 
@@ -34,7 +34,7 @@ export class JwtServiceNest implements IJwtService {
 
   async verify(jwt: AccessToken): Promise<boolean> {
     const response: Promise<boolean> = this.jwtService
-      .verifyAsync(jwt.getValue(), {
+      .verifyAsync(jwt.valueOf(), {
         ignoreExpiration: false,
       })
       .then(() => true)
@@ -49,7 +49,7 @@ export class JwtServiceNest implements IJwtService {
   }
 
   public decode(jwt: AccessToken): JwtPayload {
-    const response: JwtPayload = this.jwtService.decode<JwtPayload>(jwt.getValue());
+    const response: JwtPayload = this.jwtService.decode<JwtPayload>(jwt.valueOf());
     return response;
   }
 }
