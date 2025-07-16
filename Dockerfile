@@ -51,6 +51,7 @@ USER nodejs
 WORKDIR /app
 
 # Prod deps & compiled app
+COPY package.json pnpm-lock.yaml ./
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/scripts ./scripts
@@ -67,4 +68,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=10s CMD \
 # ─────────────────────────────────────────────────────────────────────────────
 # Start‑up command: run migrations then the API
 # ─────────────────────────────────────────────────────────────────────────────
-CMD ["sh","-c","pnpm migrate up && node dist/main.js"]
+CMD ["sh","-c","pnpm migrate up && node dist/src/main.js"]
