@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, ConflictException } from '@nestjs/common';
 import { User } from '@/user/v1/domain/user/user';
 import { IUserRepository, USER_REPOSITORY } from '@/user/v1/domain/ports/user.repository';
 
@@ -11,7 +11,7 @@ export class UserCreateUseCase {
   async execute(user: User): Promise<void> {
     const existingUser = await this.repository.findByEmail(user.getEmail().valueOf());
 
-    if (existingUser) throw new Error('User with this email already exists');
+    if (existingUser) throw new ConflictException('User with this email already exists');
 
     return await this.repository.save(user.toPrimitives());
   }

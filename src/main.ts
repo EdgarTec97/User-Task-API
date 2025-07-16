@@ -1,8 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from '@/app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { DocumentationRoles } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
+import { SwaggerAPI } from '@/shared/infrastructure/openapi/swagger.api';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,34 +10,7 @@ async function bootstrap() {
 
   app.enableCors();
 
-  const options = new DocumentBuilder()
-    .setTitle('User - Task')
-    .setDescription(
-      'This project is a hands-on on how you can use hex architecture, DDD: Domain Driven Design and TDD: Test Driven Development in your future backend applications',
-    )
-    .setVersion('1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        description: 'Member JWT',
-      },
-      DocumentationRoles.MEMBER_JWT,
-    )
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        description: 'Admin JWT',
-      },
-      DocumentationRoles.ADMIN_JWT,
-    )
-    .build();
-
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+  SwaggerAPI.setup(app);
 
   await app.listen(port);
   return port;
