@@ -2,13 +2,14 @@ import { Module, ValidationPipe } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from '@/app.controller';
+import { LoggingModule } from '@/shared/infrastructure/logging/logging.module';
 import { DatabaseModule } from '@/shared/infrastructure/database/module';
 import { HttpExceptionFilterLogger } from '@/shared/infrastructure/error-handling/boilerplate/HttpExceptionFilterLogger';
 import { GlobalErrorsInterceptor } from '@/shared/infrastructure/error-handling/boilerplate/GlobalErrorsInterceptor';
 import { DomainToInfrastructureMapper } from '@/shared/infrastructure/error-handling/DomainToInfrastructureMap';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true, cache: true }), DatabaseModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true, cache: true }), LoggingModule, DatabaseModule],
   controllers: [AppController],
   providers: [
     {
