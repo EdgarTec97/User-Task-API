@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UUID } from '@/shared/domain/ddd/UUID';
@@ -8,7 +8,9 @@ import { Role } from '@/shared/domain/jwt/Role';
 import { AccessToken } from '@/shared/domain/tokens/AccessToken';
 import { TokenPair } from '@/shared/domain/tokens/TokenPair';
 import { ExpirationTime } from '@/shared/domain/tokens/ExpirationTime';
+import { GeneralUtils } from '@/shared/infrastructure/utils/generate';
 
+@Injectable()
 export class JwtServiceNest implements IJwtService {
   private expirationTime: string;
   constructor(
@@ -22,10 +24,15 @@ export class JwtServiceNest implements IJwtService {
     const { role, sub, ...custom } = this.jwtService.decode<JwtPayload>(refreshToken.valueOf());
 
     const jwt: string = this.jwtService.sign(
-      { ...custom, accessTokenRole: role, role: Role.REFRESH_TOKEN, sub },
-      {
-        expiresIn: this.expirationTime,
-      },
+      GeneralUtils.omit(
+        {
+          ...custom,
+          accessTokenRole: role,
+          role: Role.REFRESH_TOKEN,
+          sub,
+        },
+        ['iat', 'exp'],
+      ),
     );
 
     return new AccessToken(jwt);
@@ -37,9 +44,7 @@ export class JwtServiceNest implements IJwtService {
       role,
       sub: uuid.valueOf(),
     };
-    const jwt: string = this.jwtService.sign(payload, {
-      expiresIn: this.expirationTime,
-    });
+    const jwt: string = this.jwtService.sign(payload);
 
     return new AccessToken(jwt);
   }

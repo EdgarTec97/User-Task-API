@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtServiceNest } from '@/shared/infrastructure/jwt/bootstrap/JwtServiceNest';
 import { JWT_SERVICE_TOKEN } from '@/shared/domain/jwt/JwtService';
 
+@Global()
 @Module({
   imports: [
     ConfigModule,
@@ -11,11 +12,8 @@ import { JWT_SERVICE_TOKEN } from '@/shared/domain/jwt/JwtService';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (cfg: ConfigService) => ({
-        privateKey: {
-          key: cfg.get<string>('JWT_PRIVATE_KEY')!,
-          passphrase: cfg.get<string>('JWT_PRIVATE_KEY_PASSPHRASE')!,
-        },
-        publicKey: cfg.get<string>('JWT_PUBLIC_KEY')!,
+        privateKey: cfg.get<string>('JWT_PRIVATE_KEY')!.replace(/\\n/g, '\n'),
+        publicKey: cfg.get<string>('JWT_PUBLIC_KEY')!.replace(/\\n/g, '\n'),
         signOptions: {
           algorithm: cfg.get<'RS256'>('JWT_ALGORITHM')!,
           expiresIn: cfg.get<string>('JWT_EXPIRATION_TIME')!,

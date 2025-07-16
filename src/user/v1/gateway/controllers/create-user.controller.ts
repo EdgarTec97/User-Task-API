@@ -1,7 +1,7 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
 import { User } from '@/user/v1/domain/user/user';
-import { UserCreateUseCase } from '@/user/v1/application/use-cases/use-create.use-case';
+import { UserCreateUseCase } from '@/user/v1/application/use-cases/user-create.use-case';
 import { DocumentationTags, Endpoint } from '@/shared/infrastructure/utils/Endpoint';
 import { UserDTO } from '@/user/v1/gateway/dtos/user.dto';
 import { StatusResponseDTO } from '@/shared/infrastructure/meta/dtos/StatusResponseDTO';
