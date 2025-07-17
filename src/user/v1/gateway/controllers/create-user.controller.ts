@@ -14,7 +14,7 @@ export class CreateUserController {
 
   @Endpoint({
     status: HttpStatus.CREATED,
-    type: UserDTO,
+    type: StatusResponseDTO,
     description: 'Create a user',
     tags: [DocumentationTags.USERS],
   })

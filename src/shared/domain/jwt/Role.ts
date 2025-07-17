@@ -4,4 +4,4 @@ export enum Role {
   REFRESH_TOKEN = 'REFRESH_TOKEN',
 }
 
-export const ALL_ROLES = Object.values(Role);
+export const ALL_ROLES = [Role.ADMIN, Role.MEMBER];

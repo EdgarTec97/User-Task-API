@@ -1,8 +1,8 @@
 export class Paginated<T extends { toPrimitives: () => ReturnType<T['toPrimitives']> }> {
   constructor(
     private readonly elements: T[],
-    private readonly offset: number,
-    private readonly numberOfItems: number,
+    private readonly page: number,
+    private readonly pageSize: number,
     private readonly total: number,
   ) {}
 
@@ -12,14 +12,14 @@ export class Paginated<T extends { toPrimitives: () => ReturnType<T['toPrimitive
 
   toPrimitives(): {
     elements: ReturnType<T['toPrimitives']>[];
-    offset: number;
-    numberOfItems: number;
+    page: number;
+    pageSize: number;
     total: number;
   } {
     return {
       elements: this.elements.map((el) => el.toPrimitives()),
-      offset: this.offset,
-      numberOfItems: this.numberOfItems,
+      page: this.page,
+      pageSize: this.pageSize,
       total: this.total,
     };
   }

@@ -1,4 +1,4 @@
-import { Role } from '@/shared/domain/tokens/Role';
+import { Role } from '@/shared/domain/jwt/Role';
 
 export type JwtPayload = {
   iat: number;

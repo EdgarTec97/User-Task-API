@@ -26,9 +26,19 @@ export class UserDTO {
   @IsOptional()
   public role: Role;
 
-  static fromDomain(user: User): UserDTO {
-    const { id, name, email, password, role } = user.toPrimitives();
+  @ApiProperty({ example: '2023-10-01T12:00:00Z' })
+  @IsString()
+  @IsOptional()
+  public createdAt?: string;
 
-    return { id, name, email, password, role };
+  @ApiProperty({ example: '2023-10-01T12:00:00Z' })
+  @IsString()
+  @IsOptional()
+  public updatedAt?: string;
+
+  static fromDomain(user: User): UserDTO {
+    const { id, name, email, password, role, createdAt, updatedAt } = user.toPrimitives();
+
+    return { id, name, email, password, role, createdAt, updatedAt };
   }
 }

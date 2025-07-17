@@ -1,6 +1,6 @@
 import { applyDecorators, HttpCode } from '@nestjs/common';
 import { ApiResponse as NestApiResponse, ApiTags } from '@nestjs/swagger';
-import { ApiResponseOptions } from '@nestjs/swagger/dist/decorators/api-response.decorator';
+import { ApiResponseOptions } from '@nestjs/swagger';
 
 export enum DocumentationTags {
   META = 'Meta',
