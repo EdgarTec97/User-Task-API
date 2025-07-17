@@ -10,20 +10,30 @@ import { LoginUserController } from '@/user/v1/gateway/controllers/login-user.co
 import { FindUserController } from '@/user/v1/gateway/controllers/find-user.controller';
 import { MeUserController } from '@/user/v1/gateway/controllers/me-user.controller';
 import { GetUserController } from '@/user/v1/gateway/controllers/get-user.controller';
+import { UserUpdateController } from '@/user/v1/gateway/controllers/update-user.controller';
 
 import { UserCreateUseCase } from '@/user/v1/application/use-cases/user-create.use-case';
 import { UserLoginUseCase } from '@/user/v1/application/use-cases/user-login.use-case';
 import { UserFindUseCase } from '@/user/v1/application/use-cases/user-find.use-case';
 import { UserFindOneUseCase } from '@/user/v1/application/use-cases/user-find-by.use-case';
+import { UserUpdateUseCase } from '@/user/v1/application/use-cases/user-update.use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
-  controllers: [CreateUserController, LoginUserController, FindUserController, MeUserController, GetUserController],
+  controllers: [
+    CreateUserController,
+    LoginUserController,
+    FindUserController,
+    MeUserController,
+    GetUserController,
+    UserUpdateController,
+  ],
   providers: [
     UserCreateUseCase,
     UserLoginUseCase,
     UserFindUseCase,
     UserFindOneUseCase,
+    UserUpdateUseCase,
     {
       provide: USER_REPOSITORY,
       useClass: UserTypeOrmRepository,

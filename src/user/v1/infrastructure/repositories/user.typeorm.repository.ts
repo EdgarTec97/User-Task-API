@@ -47,6 +47,10 @@ export class UserTypeOrmRepository implements IUserRepository {
     if (user) return this.toDomainUser(user);
   }
 
+  async updateById(id: string, params: Partial<UserPrimitives>): Promise<void> {
+    await this.ormRepo.update(id, params);
+  }
+
   async delete(id: string): Promise<void> {
     await this.ormRepo.delete(id);
   }

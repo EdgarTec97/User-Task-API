@@ -10,4 +10,5 @@ export interface IUserRepository {
   findById(id: string): Promise<User | void>;
   findByEmail(email: string): Promise<User | void>;
   delete(id: string): Promise<void>;
+  updateById(id: string, params: Partial<UserPrimitives>): Promise<void>;
 }
