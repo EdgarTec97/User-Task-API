@@ -10,7 +10,7 @@ export class TaskAnalyticsController {
   constructor(private readonly queryBus: QueryBus) {}
 
   @Get('analytics')
-  @ApiOkResponse({ 
+  @ApiOkResponse({
     description: 'Task analytics data',
     schema: {
       type: 'object',
@@ -19,13 +19,12 @@ export class TaskAnalyticsController {
         completedTasks: { type: 'number', example: 75 },
         activeTasks: { type: 'number', example: 25 },
         averageEstimationHours: { type: 'number', example: 8.5 },
-        totalCostOfCompletedTasks: { type: 'number', example: 15000.50 },
+        totalCostOfCompletedTasks: { type: 'number', example: 15000.5 },
         tasksCompletedThisMonth: { type: 'number', example: 12 },
-      }
-    }
+      },
+    },
   })
   async getAnalytics(): Promise<TaskAnalyticsResult> {
     return await this.queryBus.execute(new TaskAnalyticsQuery());
   }
 }
-
