@@ -1,27 +1,33 @@
-import { Controller, HttpStatus, Get, Req } from '@nestjs/common';
+import { Controller, HttpStatus, Get, Param } from '@nestjs/common';
+import { ApiParam } from '@nestjs/swagger';
 import { UserId } from '@/user/v1/domain/user/user.id';
 import { UserFindOneUseCase } from '@/user/v1/application/use-cases/user-find-by.use-case';
 import { DocumentationTags, Endpoint } from '@/shared/infrastructure/utils/Endpoint';
 import { User } from '@/user/v1/domain/user/user';
 import { UserDTO } from '@/user/v1/gateway/dtos/user.dto';
-import type { JwtPayload } from '@/shared/domain/jwt/JwtPayload';
-import { ALL_ROLES } from '@/shared/domain/jwt/Role';
+import { Role } from '@/shared/domain/jwt/Role';
 import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
 @Controller()
-export class MeUserController {
+export class GetUserController {
   constructor(private readonly useCase: UserFindOneUseCase) {}
 
   @Endpoint({
     status: HttpStatus.CREATED,
     type: UserDTO,
-    description: 'My user',
+    description: 'Get user',
     tags: [DocumentationTags.USERS],
   })
-  @GuardWithJwt(ALL_ROLES)
-  @Get('api/v1/user/me')
-  async getUser(@Req() req: Request & { jwtPayload: JwtPayload }): Promise<UserDTO> {
-    const userId: UserId = new UserId(req.jwtPayload.id);
+  @ApiParam({
+    name: 'id',
+    description: 'The unique identifier of the user',
+    type: String,
+    required: true,
+  })
+  @GuardWithJwt([Role.ADMIN])
+  @Get('api/v1/user/:id')
+  async getUser(@Param('id') id: string): Promise<UserDTO> {
+    const userId: UserId = new UserId(id);
 
     const response: User = await this.useCase.execute(userId);
 

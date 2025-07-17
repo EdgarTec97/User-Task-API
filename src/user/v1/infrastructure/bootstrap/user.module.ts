@@ -9,6 +9,7 @@ import { CreateUserController } from '@/user/v1/gateway/controllers/create-user.
 import { LoginUserController } from '@/user/v1/gateway/controllers/login-user.controller';
 import { FindUserController } from '@/user/v1/gateway/controllers/find-user.controller';
 import { MeUserController } from '@/user/v1/gateway/controllers/me-user.controller';
+import { GetUserController } from '@/user/v1/gateway/controllers/get-user.controller';
 
 import { UserCreateUseCase } from '@/user/v1/application/use-cases/user-create.use-case';
 import { UserLoginUseCase } from '@/user/v1/application/use-cases/user-login.use-case';
@@ -17,7 +18,7 @@ import { UserFindOneUseCase } from '@/user/v1/application/use-cases/user-find-by
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
-  controllers: [CreateUserController, LoginUserController, FindUserController, MeUserController],
+  controllers: [CreateUserController, LoginUserController, FindUserController, MeUserController, GetUserController],
   providers: [
     UserCreateUseCase,
     UserLoginUseCase,
