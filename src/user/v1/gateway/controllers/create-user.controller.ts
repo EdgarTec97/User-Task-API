@@ -24,7 +24,7 @@ export class CreateUserController {
   })
   @Post('api/v1/user')
   async createUser(@Body() { name, email, password, id, role }: UserDTO): Promise<StatusResponseDTO> {
-    const date = GeneralUtils.currentDate();
+    const date: string = GeneralUtils.currentDate();
     const domain: User = User.fromPrimitives({
       id: id || GeneralUtils.uuid(),
       name,

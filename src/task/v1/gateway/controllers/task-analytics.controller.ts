@@ -1,15 +1,29 @@
-import { Controller, Get } from '@nestjs/common';
-import { QueryBus } from '@nestjs/cqrs';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, HttpStatus } from '@nestjs/common';
+import { ApiOkResponse } from '@nestjs/swagger';
+import { TaskAnalyticsUseCase } from '@/task/v1/application/use-cases/task-analytics.use-case';
+import { DocumentationTags, Endpoint } from '@/shared/infrastructure/utils/Endpoint';
+import { Role } from '@/shared/domain/jwt/Role';
+import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-import { TaskAnalyticsQuery, TaskAnalyticsResult } from '@/task/v1/application/use-cases/task-analytics.use-case';
+export interface TaskAnalyticsResult {
+  totalTasks: number;
+  completedTasks: number;
+  activeTasks: number;
+  averageEstimationHours: number;
+  totalCostOfCompletedTasks: number;
+  tasksCompletedThisMonth: number;
+}
 
-@ApiTags('Tasks')
-@Controller({ path: 'tasks', version: '1' })
+@Controller()
 export class TaskAnalyticsController {
-  constructor(private readonly queryBus: QueryBus) {}
+  constructor(private readonly useCase: TaskAnalyticsUseCase) {}
 
-  @Get('analytics')
+  @Endpoint({
+    status: HttpStatus.OK,
+    type: Object,
+    description: 'Get task analytics',
+    tags: [DocumentationTags.TASKS],
+  })
   @ApiOkResponse({
     description: 'Task analytics data',
     schema: {
@@ -24,7 +38,10 @@ export class TaskAnalyticsController {
       },
     },
   })
+  @GuardWithJwt([Role.ADMIN])
+  @Get('api/v1/task/analytics')
   async getAnalytics(): Promise<TaskAnalyticsResult> {
-    return await this.queryBus.execute(new TaskAnalyticsQuery());
+    const response: TaskAnalyticsResult = await this.useCase.execute();
+    return response;
   }
 }

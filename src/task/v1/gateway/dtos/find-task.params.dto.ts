@@ -10,7 +10,7 @@ export class FindTaskParamsDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsDateString()
-  dueDate?: Date;
+  dueDate?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

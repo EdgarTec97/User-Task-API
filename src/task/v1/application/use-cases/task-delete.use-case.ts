@@ -3,7 +3,7 @@ import { TaskId } from '@/task/v1/domain/task/task.id';
 import { TASK_REPOSITORY, TaskRepository } from '@/task/v1/domain/ports/task.repository';
 
 @Injectable()
-export class DeleteTaskUseCase {
+export class TaskDeleteUseCase {
   constructor(
     @Inject(TASK_REPOSITORY)
     private readonly taskRepository: TaskRepository,

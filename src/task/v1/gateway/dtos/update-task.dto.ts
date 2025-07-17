@@ -21,7 +21,7 @@ export class UpdateTaskDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsDateString()
-  dueDate?: Date;
+  dueDate?: string;
 
   @ApiPropertyOptional({ enum: TaskStatusEnum })
   @IsOptional()
