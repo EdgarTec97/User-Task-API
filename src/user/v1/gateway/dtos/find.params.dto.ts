@@ -3,13 +3,13 @@ import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Role } from '@/shared/domain/jwt/Role';
 
 export class FindParamsDTO {
-  @ApiProperty({ example: 1 })
+  @ApiProperty({ example: 1, minimum: 1 })
   @IsString()
-  public page: number;
+  page: number;
 
-  @ApiProperty({ example: 10 })
+  @ApiProperty({ example: 10, minimum: 1, maximum: 20 })
   @IsString()
-  public pageSize: number;
+  pageSize: number;
 
   @ApiProperty({ example: 'name' })
   @IsString()
