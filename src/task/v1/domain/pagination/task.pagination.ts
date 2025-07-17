@@ -6,6 +6,7 @@ import { TaskPaginationDueDate } from '@/task/v1/domain/pagination/task.paginati
 import { TaskPaginationPage } from '@/task/v1/domain/pagination/task.pagination.page';
 import { TaskPaginationPageSize } from '@/task/v1/domain/pagination/task.pagination.pageSize';
 import { TaskPaginationTitle } from '@/task/v1/domain/pagination/task.pagination.title';
+import { TaskPaginationStatus } from '@/task/v1/domain/pagination/task.pagination.status';
 
 export type TaskPaginationPrimitives = ReturnType<TaskPagination['toPrimitives']>;
 
@@ -14,10 +15,12 @@ export class TaskPagination extends AggregateRoot {
     private readonly page: TaskPaginationPage,
     private readonly pageSize: TaskPaginationPageSize,
     private readonly title: TaskPaginationTitle,
-    private readonly dueDate: TaskPaginationDueDate,
+    private readonly startDate: TaskPaginationDueDate,
+    private readonly endDate: TaskPaginationDueDate,
     private readonly assignedUser: TaskPaginationAssignedUser,
     private readonly assignedUserName: TaskPaginationAssignedUserName,
     private readonly assignedUserEmail: TaskPaginationAssignedUserEmail,
+    private readonly status: TaskPaginationStatus,
   ) {
     super();
   }
@@ -27,10 +30,12 @@ export class TaskPagination extends AggregateRoot {
       new TaskPaginationPage(p.page),
       new TaskPaginationPageSize(p.pageSize),
       new TaskPaginationTitle(p.title),
-      new TaskPaginationDueDate(p.dueDate),
+      new TaskPaginationDueDate(p.startDate),
+      new TaskPaginationDueDate(p.endDate),
       new TaskPaginationAssignedUser(p.assignedUser),
       new TaskPaginationAssignedUserName(p.assignedUserName),
       new TaskPaginationAssignedUserEmail(p.assignedUserEmail),
+      new TaskPaginationStatus(p.status),
     );
   }
 
@@ -39,10 +44,12 @@ export class TaskPagination extends AggregateRoot {
       page: this.page.valueOf(),
       pageSize: this.pageSize.valueOf(),
       title: this.title.valueOf(),
-      dueDate: this.dueDate.valueOf(),
+      startDate: this.startDate.valueOf(),
+      endDate: this.endDate.valueOf(),
       assignedUser: this.assignedUser.valueOf(),
       assignedUserName: this.assignedUserName.valueOf(),
       assignedUserEmail: this.assignedUserEmail.valueOf(),
+      status: this.status.valueOf(),
     };
   }
 }
