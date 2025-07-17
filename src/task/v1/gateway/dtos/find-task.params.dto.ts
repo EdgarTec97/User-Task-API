@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsDateString, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsDateString, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+import { TaskStatusEnum } from '@/task/v1/domain/task/task.status';
 
 export class FindTaskParamsDto {
   @ApiPropertyOptional({ example: 1, minimum: 1 })
@@ -22,7 +23,13 @@ export class FindTaskParamsDto {
   @IsDateString()
   @IsOptional()
   @Transform(({ value }: { value: string }) => (value === '' ? undefined : value))
-  dueDate?: string;
+  startDate?: string;
+
+  @ApiPropertyOptional()
+  @IsDateString()
+  @IsOptional()
+  @Transform(({ value }: { value: string }) => (value === '' ? undefined : value))
+  endDate?: string;
 
   @ApiPropertyOptional()
   @IsUUID()
@@ -39,4 +46,9 @@ export class FindTaskParamsDto {
   @IsOptional()
   @IsString()
   assignedUserEmail?: string;
+
+  @ApiPropertyOptional({ enum: TaskStatusEnum, example: TaskStatusEnum.ACTIVE })
+  @IsEnum(TaskStatusEnum)
+  @IsOptional()
+  status!: TaskStatusEnum;
 }

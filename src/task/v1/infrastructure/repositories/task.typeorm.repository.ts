@@ -8,6 +8,7 @@ import { Task as TaskEntity } from '@/task/v1/infrastructure/entities/task.entit
 import { TaskStatusEnum } from '@/task/v1/domain/task/task.status';
 import { TaskPaginationPrimitives } from '@/task/v1/domain/pagination/task.pagination';
 import { User } from '@/user/v1/infrastructure/entities/user.entity';
+import { GeneralUtils } from '@/shared/infrastructure/utils/generate';
 
 @Injectable()
 export class TaskTypeOrmRepository implements TaskRepository {
@@ -48,13 +49,30 @@ export class TaskTypeOrmRepository implements TaskRepository {
 
     if (pagination.title) queryBuilder.andWhere('task.title ILIKE :title', { title: `%${pagination.title}%` });
 
-    if (pagination.dueDate) queryBuilder.andWhere('task.dueDate = :dueDate', { dueDate: pagination.dueDate });
+    if (pagination.startDate && pagination.endDate)
+      queryBuilder.andWhere('task.dueDate BETWEEN :start AND :end', {
+        start: GeneralUtils.startDay(pagination.startDate),
+        end: GeneralUtils.endDay(pagination.endDate),
+      });
+    else if (pagination.startDate)
+      queryBuilder.andWhere('task.dueDate >= :start', {
+        start: GeneralUtils.startDay(pagination.startDate),
+      });
+    else if (pagination.endDate)
+      queryBuilder.andWhere('task.dueDate <= :end', {
+        end: GeneralUtils.endDay(pagination.endDate),
+      });
 
     if (pagination.assignedUser) queryBuilder.andWhere('user.id = :userId', { userId: pagination.assignedUser });
 
     if (pagination.assignedUserEmail)
       queryBuilder.andWhere('user.email ILIKE :email', {
         email: `%${pagination.assignedUserEmail}%`,
+      });
+
+    if (pagination.status)
+      queryBuilder.andWhere('task.status = :status', {
+        status: pagination.status,
       });
 
     if (pagination.assignedUserName)
