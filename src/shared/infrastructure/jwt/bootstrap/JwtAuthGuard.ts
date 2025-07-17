@@ -62,12 +62,12 @@ export function GuardWithJwt(
   propertyKey?: string | symbol,
   descriptor?: TypedPropertyDescriptor<Y>,
 ) => void {
-  const apiSecurities: (ClassDecorator & MethodDecorator)[] = roles.map(
-    (role) => ApiSecurity(roleToDocumentationRole[role]) as ClassDecorator & MethodDecorator,
+  const apiSecurities: (ClassDecorator & MethodDecorator)[] = roles.map((role) =>
+    ApiSecurity(roleToDocumentationRole[role]),
   );
 
   return applyDecorators(
-    ApiBearerAuth('access-token') as ClassDecorator & MethodDecorator,
+    ApiBearerAuth('access-token'),
     UseGuards(JwtAuthGuard),
     SetMetadata('roles', roles),
     UseGuards(AllowedRolesGuard),

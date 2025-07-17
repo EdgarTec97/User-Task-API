@@ -5,6 +5,7 @@ import { UserFindUseCase } from '@/user/v1/application/use-cases/user-find.use-c
 import { DocumentationTags, Endpoint } from '@/shared/infrastructure/utils/Endpoint';
 import { User } from '@/user/v1/domain/user/user';
 import { UserPaginationDTO } from '@/user/v1/gateway/dtos/user.pagination.dto';
+import { FindParamsDTO } from '@/user/v1/gateway/dtos/find.params.dto';
 import { Role } from '@/shared/domain/jwt/Role';
 import { Paginated } from '@/shared/domain/utils/Paginated';
 import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
@@ -56,13 +57,7 @@ export class FindUserController {
   })
   @GuardWithJwt([Role.ADMIN])
   @Get('api/v1/user')
-  async createUser(
-    @Query() page: string,
-    @Query() pageSize: string,
-    @Query() name: string,
-    @Query() email: string,
-    @Query() role: Role,
-  ): Promise<UserPaginationDTO> {
+  async createUser(@Query() { email, name, page, pageSize, role }: FindParamsDTO): Promise<UserPaginationDTO> {
     const pagination: UserPagination = UserPagination.fromPrimitives({
       page: Number(page) || 1,
       pageSize: Number(pageSize) || 10,

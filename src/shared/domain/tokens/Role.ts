@@ -7,8 +7,6 @@ export class Role extends SingleValueObject<GeneralRoles> {
   }
 
   validate(): boolean {
-    return [GeneralRoles.ADMIN, GeneralRoles.REFRESH_TOKEN, GeneralRoles.MEMBER].includes(
-      this.valueOf() as GeneralRoles,
-    );
+    return [GeneralRoles.ADMIN, GeneralRoles.REFRESH_TOKEN, GeneralRoles.MEMBER].includes(this.valueOf());
   }
 }
