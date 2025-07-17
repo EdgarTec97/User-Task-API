@@ -1,30 +1,88 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { QueryBus } from '@nestjs/cqrs';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-
-import { FindTaskQuery } from '@/task/v1/application/use-cases/task-find.use-case';
+import { Query, Controller, HttpStatus, Get } from '@nestjs/common';
+import { ApiQuery } from '@nestjs/swagger';
+import { TaskPagination, TaskPaginationPrimitives } from '@/task/v1/domain/pagination/task.pagination';
+import { TaskFindUseCase } from '@/task/v1/application/use-cases/task-find.use-case';
+import { DocumentationTags, Endpoint } from '@/shared/infrastructure/utils/Endpoint';
+import { Task } from '@/task/v1/domain/task/task';
+import { TaskPaginationDTO } from '@/task/v1/gateway/dtos/task.pagination.dto';
 import { FindTaskParamsDto } from '@/task/v1/gateway/dtos/find-task.params.dto';
-import { TaskDto } from '@/task/v1/gateway/dtos/task.dto';
+import { Paginated } from '@/shared/domain/utils/Paginated';
+import { Role } from '@/shared/domain/jwt/Role';
+import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-@ApiTags('Tasks')
-@Controller({ path: 'tasks', version: '1' })
+@Controller()
 export class FindTaskController {
-  constructor(private readonly queryBus: QueryBus) {}
+  constructor(private readonly useCase: TaskFindUseCase) {}
 
-  @Get()
-  @ApiOkResponse({ type: [TaskDto] })
-  async find(@Query() params: FindTaskParamsDto): Promise<TaskDto[]> {
-    const tasks = await this.queryBus.execute(
-      new FindTaskQuery(
-        0, // page
-        100, // pageSize
-        params.title,
-        params.dueDate,
-        params.assignedUser,
-        params.assignedUserName,
-        params.assignedUserEmail,
-      ),
-    );
-    return tasks.map((task) => task.toPrimitives());
+  @Endpoint({
+    status: HttpStatus.OK,
+    type: TaskPaginationDTO,
+    description: 'Find tasks',
+    tags: [DocumentationTags.TASKS],
+  })
+  @ApiQuery({
+    name: 'page',
+    example: 1,
+    type: Number,
+    required: true,
+    description: 'page number for pagination',
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    example: 10,
+    type: Number,
+    required: true,
+    description: 'number of items per page for pagination',
+  })
+  @ApiQuery({
+    name: 'title',
+    example: 'Task Title',
+    type: String,
+    required: false,
+    description: 'Filter tasks by title',
+  })
+  @ApiQuery({
+    name: 'dueDate',
+    example: '2023-12-31',
+    type: String,
+    required: false,
+    description: 'Filter tasks by due date',
+  })
+  @ApiQuery({
+    name: 'assignedUser',
+    example: '6a2afbe5-267a-4de4-8d32-94eed09482cd',
+    type: String,
+    required: false,
+    description: 'Filter tasks by assigned user ID',
+  })
+  @ApiQuery({
+    name: 'assignedUserName',
+    example: 'John Doe',
+    type: String,
+    required: false,
+    description: 'Filter tasks by assigned user name',
+  })
+  @ApiQuery({
+    name: 'assignedUserEmail',
+    example: 'john@example.com',
+    type: String,
+    required: false,
+    description: 'Filter tasks by assigned user email',
+  })
+  @GuardWithJwt([Role.ADMIN, Role.MEMBER])
+  @Get('api/v1/task')
+  async getTasks(
+    @Query()
+    params: FindTaskParamsDto & { page: string; pageSize: string },
+  ): Promise<TaskPaginationDTO> {
+    const pagination: TaskPagination = TaskPagination.fromPrimitives({
+      ...params,
+      page: Number(params.page) || 1,
+      pageSize: Number(params.pageSize) || 10,
+    } as TaskPaginationPrimitives);
+
+    const response: Paginated<Task> = await this.useCase.execute(pagination);
+
+    return TaskPaginationDTO.fromDomain(response);
   }
 }

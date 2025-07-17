@@ -5,7 +5,7 @@ import { TASK_REPOSITORY, TaskRepository } from '@/task/v1/domain/ports/task.rep
 import { Paginated } from '@/shared/domain/utils/Paginated';
 
 @Injectable()
-export class FindTaskUseCase {
+export class TaskFindUseCase {
   constructor(
     @Inject(TASK_REPOSITORY)
     private readonly taskRepository: TaskRepository,

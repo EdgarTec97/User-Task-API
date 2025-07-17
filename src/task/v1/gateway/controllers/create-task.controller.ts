@@ -1,14 +1,15 @@
 import { Body, Controller, Post, HttpStatus } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody } from '@nestjs/swagger';
 import { DocumentationTags, Endpoint } from '@/shared/infrastructure/utils/Endpoint';
 import { CreateTaskUseCase } from '@/task/v1/application/use-cases/task-create.use-case';
 import { CreateTaskDto } from '@/task/v1/gateway/dtos/create-task.dto';
 import { GeneralUtils } from '@/shared/infrastructure/utils/generate';
 import { Task } from '@/task/v1/domain/task/task';
 import { StatusResponseDTO } from '@/shared/infrastructure/meta/dtos/StatusResponseDTO';
+import { Role } from '@/shared/domain/jwt/Role';
+import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-@ApiTags('Tasks')
-@Controller({ path: 'tasks', version: '1' })
+@Controller({ path: 'tasks', version: 'v1' })
 export class CreateTaskController {
   constructor(private readonly useCase: CreateTaskUseCase) {}
 
@@ -22,9 +23,10 @@ export class CreateTaskController {
     type: CreateTaskDto,
     description: 'Task data to create a record',
   })
+  @GuardWithJwt([Role.ADMIN])
   @Post()
   async create(@Body() taskDto: CreateTaskDto): Promise<StatusResponseDTO> {
-    const date = GeneralUtils.currentDate();
+    const date: string = GeneralUtils.currentDate();
     const domain: Task = Task.fromPrimitives({
       ...taskDto,
       id: taskDto.id || GeneralUtils.uuid(),

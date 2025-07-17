@@ -14,9 +14,9 @@ import { DeleteTaskController } from '@/task/v1/gateway/controllers/delete-task.
 import { TaskAnalyticsController } from '@/task/v1/gateway/controllers/task-analytics.controller';
 
 import { CreateTaskUseCase } from '@/task/v1/application/use-cases/task-create.use-case';
-import { FindTaskUseCase } from '@/task/v1/application/use-cases/task-find.use-case';
-import { UpdateTaskUseCase } from '@/task/v1/application/use-cases/task-update.use-case';
-import { DeleteTaskUseCase } from '@/task/v1/application/use-cases/task-delete.use-case';
+import { TaskFindUseCase } from '@/task/v1/application/use-cases/task-find.use-case';
+import { TaskUpdateUseCase } from '@/task/v1/application/use-cases/task-update.use-case';
+import { TaskDeleteUseCase } from '@/task/v1/application/use-cases/task-delete.use-case';
 import { TaskAnalyticsUseCase } from '@/task/v1/application/use-cases/task-analytics.use-case';
 
 @Module({
@@ -30,9 +30,9 @@ import { TaskAnalyticsUseCase } from '@/task/v1/application/use-cases/task-analy
   ],
   providers: [
     CreateTaskUseCase,
-    FindTaskUseCase,
-    UpdateTaskUseCase,
-    DeleteTaskUseCase,
+    TaskFindUseCase,
+    TaskUpdateUseCase,
+    TaskDeleteUseCase,
     TaskAnalyticsUseCase,
     {
       provide: TASK_REPOSITORY,
