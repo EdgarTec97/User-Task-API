@@ -5,9 +5,15 @@ on:
     branches: [main, develop]
     types: [opened, reopened, synchronize, ready_for_review]
 
+  push:
+    branches: [develop, main]
+
 jobs:
   tests:
-    if: ${{ github.event.pull_request.draft == false }}
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
+      (github.event_name == 'push')
+
     runs-on: ubuntu-latest
     container: node:20.1.0
     timeout-minutes: 15
