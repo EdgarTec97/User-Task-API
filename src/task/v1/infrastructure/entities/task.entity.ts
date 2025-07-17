@@ -33,7 +33,7 @@ export class Task {
   @Column()
   cost!: number;
 
-  @ManyToMany(() => User)
+  @ManyToMany(() => User, (user) => user.tasks)
   @JoinTable()
   assignedUsers!: User[];
 

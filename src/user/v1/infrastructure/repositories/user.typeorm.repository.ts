@@ -47,13 +47,13 @@ export class UserTypeOrmRepository implements IUserRepository {
       .createQueryBuilder('user')
       .leftJoin('user.tasks', 'task')
       .select([
-        'user.id',
-        'user.name',
-        'user.email',
-        'user.password',
-        'user.role',
-        'user.createdAt',
-        'user.updatedAt',
+        'user.id            AS id',
+        'user.name          AS name',
+        'user.email         AS email',
+        'user.password      AS password',
+        'user.role          AS role',
+        'user.createdAt     AS createdAt',
+        'user.updatedAt     AS updatedAt',
         "COUNT(CASE WHEN task.status = 'completed' THEN 1 END) as completedTasksCount",
         "COALESCE(SUM(CASE WHEN task.status = 'completed' THEN task.cost ELSE 0 END), 0) as totalCompletedTasksCost",
       ])

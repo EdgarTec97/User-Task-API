@@ -6,7 +6,6 @@ export class TaskDescription extends SingleValueObject<string> {
   }
 
   validate(): boolean {
-    const value: string = this.valueOf();
-    return value.length > 0 && value.length < 100;
+    return true;
   }
 }

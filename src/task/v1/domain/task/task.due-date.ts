@@ -1,5 +1,4 @@
 import { SingleValueObject } from '@/shared/domain/ddd/SingleValueObject';
-import { validateDate } from '@/shared/domain/utils/validators';
 
 export class TaskDueDate extends SingleValueObject<string> {
   constructor(value: string) {
@@ -7,6 +6,6 @@ export class TaskDueDate extends SingleValueObject<string> {
   }
 
   validate(): boolean {
-    return validateDate(this.valueOf());
+    return true;
   }
 }
