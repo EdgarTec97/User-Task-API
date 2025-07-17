@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+    types: [opened, reopened, synchronize, ready_for_review]
+
+jobs:
+  tests:
+    if: ${{ github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+    container: node:20.1.0
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:14-alpine
+        env:
+          POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+          POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U ${{ vars.POSTGRES_USER }}"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    env:
+      NODE_ENV: test
+      PROJECT_MODE: test
+      PROJECT_PORT: 3000
+
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+      POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: ~/.local/share/pnpm
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+      - name: Install PNPM
+        run: npm i -g pnpm@10.13.1
+      - name: Install deps
+        run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Build
+        run: pnpm build
+      - name: Lint
+        run: pnpm lint
+      - name: Test
+        run: pnpm test
