@@ -37,26 +37,30 @@ export class TaskTypeOrmRepository implements TaskRepository {
   }
 
   async findAll(pagination: TaskPaginationPrimitives): Promise<Paginated<DomainTask>> {
-    const queryBuilder = this.repository.createQueryBuilder('task');
+    const { page = 1, pageSize = 10 } = pagination;
+
+    const queryBuilder = this.repository
+      .createQueryBuilder('task')
+      .leftJoinAndSelect('task.assignedUsers', 'user')
+      .orderBy('task.createdAt', 'DESC')
+      .skip((page - 1) * pageSize)
+      .take(pageSize);
 
     if (pagination.title) queryBuilder.andWhere('task.title ILIKE :title', { title: `%${pagination.title}%` });
-    if (pagination.dueDate) queryBuilder.andWhere('task.dueDate = :dueDate', { dueDate: pagination.dueDate });
-    if (pagination.assignedUser)
-      queryBuilder
-        .leftJoinAndSelect('task.assignedUsers', 'user')
-        .andWhere('user.id = :userId', { userId: pagination.assignedUser });
-    if (pagination.assignedUserEmail)
-      queryBuilder
-        .leftJoinAndSelect('task.assignedUsers', 'user')
-        .andWhere('user.email ILIKE :email', { email: `%${pagination.assignedUserEmail}%` });
-    if (pagination.assignedUserName)
-      queryBuilder
-        .leftJoinAndSelect('task.assignedUsers', 'user')
-        .andWhere('user.name ILIKE :userName', { userName: `%${pagination.assignedUserName}%` });
 
-    queryBuilder.orderBy('task.createdAt', 'DESC');
-    queryBuilder.skip((pagination.page - 1) * pagination.pageSize);
-    queryBuilder.take(pagination.pageSize);
+    if (pagination.dueDate) queryBuilder.andWhere('task.dueDate = :dueDate', { dueDate: pagination.dueDate });
+
+    if (pagination.assignedUser) queryBuilder.andWhere('user.id = :userId', { userId: pagination.assignedUser });
+
+    if (pagination.assignedUserEmail)
+      queryBuilder.andWhere('user.email ILIKE :email', {
+        email: `%${pagination.assignedUserEmail}%`,
+      });
+
+    if (pagination.assignedUserName)
+      queryBuilder.andWhere('user.name ILIKE :userName', {
+        userName: `%${pagination.assignedUserName}%`,
+      });
 
     const [taskEntities, total] = await queryBuilder.getManyAndCount();
 

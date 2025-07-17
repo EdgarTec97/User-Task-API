@@ -50,7 +50,6 @@ export class UserTypeOrmRepository implements IUserRepository {
         'user.id            AS id',
         'user.name          AS name',
         'user.email         AS email',
-        'user.password      AS password',
         'user.role          AS role',
         'user.createdAt     AS createdAt',
         'user.updatedAt     AS updatedAt',
@@ -96,7 +95,10 @@ export class UserTypeOrmRepository implements IUserRepository {
   }
 
   async findByEmail(email: string): Promise<DomainUser | void> {
-    const user: UserEntity | null = await this.ormRepo.findOne({ where: { email } });
+    const user: UserEntity | null = await this.ormRepo.findOne({
+      where: { email },
+      select: ['id', 'name', 'email', 'password', 'role', 'createdAt', 'updatedAt'],
+    });
     if (user) return this.toDomainUser(user);
   }
 
