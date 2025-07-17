@@ -73,7 +73,7 @@ export class FindTaskController {
   @Get()
   async getTasks(
     @Query()
-    params: FindTaskParamsDto & { page: string; pageSize: string },
+    params: FindTaskParamsDto,
   ): Promise<TaskPaginationDTO> {
     const pagination: TaskPagination = TaskPagination.fromPrimitives({
       ...params,

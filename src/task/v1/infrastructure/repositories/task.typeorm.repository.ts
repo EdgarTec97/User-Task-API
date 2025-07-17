@@ -39,30 +39,23 @@ export class TaskTypeOrmRepository implements TaskRepository {
   async findAll(pagination: TaskPaginationPrimitives): Promise<Paginated<DomainTask>> {
     const queryBuilder = this.repository.createQueryBuilder('task');
 
-    if (pagination.title) {
-      queryBuilder.andWhere('task.title ILIKE :title', { title: `%${pagination.title}%` });
-    }
-    if (pagination.dueDate) {
-      queryBuilder.andWhere('task.dueDate = :dueDate', { dueDate: pagination.dueDate });
-    }
-    if (pagination.assignedUser) {
+    if (pagination.title) queryBuilder.andWhere('task.title ILIKE :title', { title: `%${pagination.title}%` });
+    if (pagination.dueDate) queryBuilder.andWhere('task.dueDate = :dueDate', { dueDate: pagination.dueDate });
+    if (pagination.assignedUser)
       queryBuilder
         .leftJoinAndSelect('task.assignedUsers', 'user')
         .andWhere('user.id = :userId', { userId: pagination.assignedUser });
-    }
-    if (pagination.assignedUserEmail) {
+    if (pagination.assignedUserEmail)
       queryBuilder
         .leftJoinAndSelect('task.assignedUsers', 'user')
         .andWhere('user.email ILIKE :email', { email: `%${pagination.assignedUserEmail}%` });
-    }
-    if (pagination.assignedUserName) {
+    if (pagination.assignedUserName)
       queryBuilder
         .leftJoinAndSelect('task.assignedUsers', 'user')
         .andWhere('user.name ILIKE :userName', { userName: `%${pagination.assignedUserName}%` });
-    }
 
     queryBuilder.orderBy('task.createdAt', 'DESC');
-    queryBuilder.skip(pagination.page * pagination.pageSize);
+    queryBuilder.skip((pagination.page - 1) * pagination.pageSize);
     queryBuilder.take(pagination.pageSize);
 
     const [taskEntities, total] = await queryBuilder.getManyAndCount();
