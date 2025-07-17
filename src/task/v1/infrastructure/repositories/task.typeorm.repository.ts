@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository, MoreThanOrEqual } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Paginated } from '@/shared/domain/utils/Paginated';
 import { Task as DomainTask, TaskPrimitives } from '@/task/v1/domain/task/task';
 import { TaskRepository } from '@/task/v1/domain/ports/task.repository';
@@ -9,6 +9,10 @@ import { TaskStatusEnum } from '@/task/v1/domain/task/task.status';
 import { TaskPaginationPrimitives } from '@/task/v1/domain/pagination/task.pagination';
 import { User } from '@/user/v1/infrastructure/entities/user.entity';
 import { GeneralUtils } from '@/shared/infrastructure/utils/generate';
+import { TaskAnalytics } from '@/task/v1/domain/analytics/task-analytics';
+import { TaskAnalyticsStartDate } from '@/task/v1/domain/analytics/task-analytics.start-date';
+import { TaskAnalyticsEndDate } from '@/task/v1/domain/analytics/task-analytics.end-date';
+import { TaskAnalyticsGranularity } from '@/task/v1/domain/analytics/task-analytics.granularity';
 
 @Injectable()
 export class TaskTypeOrmRepository implements TaskRepository {
@@ -91,51 +95,78 @@ export class TaskTypeOrmRepository implements TaskRepository {
     await this.repository.delete(id);
   }
 
-  async buildAnalytics(): Promise<any> {
-    const totalTasks: number = await this.repository.count();
+  async buildAnalytics(
+    startDate?: TaskAnalyticsStartDate,
+    endDate?: TaskAnalyticsEndDate,
+    granularity?: TaskAnalyticsGranularity,
+  ): Promise<TaskAnalytics> {
+    const queryBuilder = this.repository.createQueryBuilder('task');
 
-    const completedTasks: number = await this.repository.count({
-      where: { status: TaskStatusEnum.COMPLETED },
-    });
+    if (startDate && endDate)
+      queryBuilder.andWhere('task.createdAt BETWEEN :start AND :end', {
+        start: GeneralUtils.startDay(startDate.valueOf()),
+        end: GeneralUtils.endDay(endDate.valueOf()),
+      });
+    else if (startDate)
+      queryBuilder.andWhere('task.createdAt >= :start', {
+        start: GeneralUtils.startDay(startDate.valueOf()),
+      });
+    else if (endDate)
+      queryBuilder.andWhere('task.createdAt <= :end', {
+        end: GeneralUtils.endDay(endDate.valueOf()),
+      });
 
-    const activeTasks: number = await this.repository.count({
-      where: { status: TaskStatusEnum.ACTIVE },
-    });
+    const totalTasks: number = await queryBuilder.getCount();
 
-    const avgEstimationResult: { average: string } | undefined = await this.repository
-      .createQueryBuilder('task')
+    const completedTasksQuery = queryBuilder.clone();
+    const completedTasks: number = await completedTasksQuery
+      .andWhere('task.status = :status', { status: TaskStatusEnum.COMPLETED })
+      .getCount();
+
+    const activeTasksQuery = queryBuilder.clone();
+    const activeTasks: number = await activeTasksQuery
+      .andWhere('task.status = :status', { status: TaskStatusEnum.ACTIVE })
+      .getCount();
+
+    const avgEstimationResult: { average: string } | undefined = await queryBuilder
+      .clone()
       .select('AVG(task.estimationHours)', 'average')
       .getRawOne();
 
     const averageEstimationHours = Number(avgEstimationResult?.average) || 0;
 
-    const totalCostResult: { total: string } | undefined = await this.repository
-      .createQueryBuilder('task')
+    const totalCostResult: { total: string } | undefined = await queryBuilder
+      .clone()
       .select('SUM(task.cost)', 'total')
-      .where('task.status = :status', { status: 'completed' })
+      .andWhere('task.status = :status', { status: TaskStatusEnum.COMPLETED })
       .getRawOne();
 
     const totalCostOfCompletedTasks: number = Number(totalCostResult?.total) || 0;
 
-    const currentMonth: Date = new Date();
-    currentMonth.setDate(1);
-    currentMonth.setHours(0, 0, 0, 0);
+    // New statistic 1: Total estimation hours for completed tasks
+    const totalEstimationHoursResult: { total: string } | undefined = await queryBuilder
+      .clone()
+      .select('SUM(task.estimationHours)', 'total')
+      .andWhere('task.status = :status', { status: TaskStatusEnum.COMPLETED })
+      .getRawOne();
 
-    const tasksCompletedThisMonth = await this.repository.count({
-      where: {
-        status: TaskStatusEnum.COMPLETED,
-        updatedAt: MoreThanOrEqual(currentMonth),
-      },
-    });
+    const totalEstimationHoursCompleted: number = Number(totalEstimationHoursResult?.total) || 0;
 
-    return {
+    // New statistic 2: Average cost per completed task
+    const averageCostPerCompletedTask: number = completedTasks > 0 ? totalCostOfCompletedTasks / completedTasks : 0;
+
+    return TaskAnalytics.fromPrimitives({
       totalTasks,
       completedTasks,
       activeTasks,
       averageEstimationHours,
-      totalCostOfCompletedTasks,
-      tasksCompletedThisMonth,
-    };
+      totalCostCompletedTasks: totalCostOfCompletedTasks,
+      totalEstimationHoursCompleted,
+      averageCostPerCompletedTask,
+      startDate: startDate?.valueOf(),
+      endDate: endDate?.valueOf(),
+      granularity: granularity?.valueOf(),
+    });
   }
 
   private toDomainTask(task: TaskEntity): DomainTask {
