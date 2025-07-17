@@ -6,6 +6,6 @@ export class TaskEstimationHours extends SingleValueObject<number> {
   }
 
   validate(): boolean {
-    return this.valueOf() >= 0;
+    return true;
   }
 }
