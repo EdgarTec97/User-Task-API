@@ -8,7 +8,7 @@ import { LoginDTO } from '@/user/v1/gateway/dtos/login.dto';
 import { tokenDTO } from '@/user/v1/gateway/dtos/token.dto';
 import { TokenPair } from '@/shared/domain/tokens/TokenPair';
 
-@Controller()
+@Controller({ path: 'api/v1/user', version: '1.0.0' })
 export class LoginUserController {
   constructor(private readonly useCase: UserLoginUseCase) {}
 
@@ -22,7 +22,7 @@ export class LoginUserController {
     type: LoginDTO,
     description: 'Login user with email and password',
   })
-  @Post('api/v1/user/login')
+  @Post('/login')
   async loginUser(@Body() { email, password }: LoginDTO): Promise<tokenDTO> {
     const token: TokenPair = await this.useCase.execute(new UserEmail(email), new UserPassword(password));
 

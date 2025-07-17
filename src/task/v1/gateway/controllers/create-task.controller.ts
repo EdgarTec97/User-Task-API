@@ -9,7 +9,7 @@ import { StatusResponseDTO } from '@/shared/infrastructure/meta/dtos/StatusRespo
 import { Role } from '@/shared/domain/jwt/Role';
 import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-@Controller({ path: 'tasks', version: 'v1' })
+@Controller({ path: '/api/v1/task', version: '1.0.0' })
 export class CreateTaskController {
   constructor(private readonly useCase: CreateTaskUseCase) {}
 

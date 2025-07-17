@@ -10,7 +10,7 @@ import { Role } from '@/shared/domain/jwt/Role';
 import { Paginated } from '@/shared/domain/utils/Paginated';
 import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-@Controller()
+@Controller({ path: 'api/v1/user', version: '1.0.0' })
 export class FindUserController {
   constructor(private readonly useCase: UserFindUseCase) {}
 
@@ -56,7 +56,7 @@ export class FindUserController {
     description: 'Filter users by role',
   })
   @GuardWithJwt([Role.ADMIN])
-  @Get('api/v1/user')
+  @Get()
   async getUsers(@Query() { email, name, page, pageSize, role }: FindParamsDTO): Promise<UserPaginationDTO> {
     const pagination: UserPagination = UserPagination.fromPrimitives({
       page: Number(page) || 1,

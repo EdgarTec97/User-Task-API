@@ -8,7 +8,7 @@ import type { JwtPayload } from '@/shared/domain/jwt/JwtPayload';
 import { ALL_ROLES } from '@/shared/domain/jwt/Role';
 import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-@Controller()
+@Controller({ path: 'api/v1/user', version: '1.0.0' })
 export class MeUserController {
   constructor(private readonly useCase: UserFindOneUseCase) {}
 
@@ -19,7 +19,7 @@ export class MeUserController {
     tags: [DocumentationTags.USERS],
   })
   @GuardWithJwt(ALL_ROLES)
-  @Get('api/v1/user/me')
+  @Get('/me')
   async getUser(@Req() req: Request & { jwtPayload: JwtPayload }): Promise<UserDTO> {
     const userId: UserId = new UserId(req.jwtPayload.id);
 

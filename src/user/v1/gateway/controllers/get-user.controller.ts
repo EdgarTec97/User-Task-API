@@ -8,7 +8,7 @@ import { UserDTO } from '@/user/v1/gateway/dtos/user.dto';
 import { Role } from '@/shared/domain/jwt/Role';
 import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-@Controller()
+@Controller({ path: 'api/v1/user', version: '1.0.0' })
 export class GetUserController {
   constructor(private readonly useCase: UserFindOneUseCase) {}
 
@@ -25,7 +25,7 @@ export class GetUserController {
     required: true,
   })
   @GuardWithJwt([Role.ADMIN])
-  @Get('api/v1/user/:id')
+  @Get('/:id')
   async getUser(@Param('id') id: string): Promise<UserDTO> {
     const userId: UserId = new UserId(id);
 

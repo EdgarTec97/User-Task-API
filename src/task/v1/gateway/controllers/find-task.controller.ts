@@ -10,7 +10,7 @@ import { Paginated } from '@/shared/domain/utils/Paginated';
 import { Role } from '@/shared/domain/jwt/Role';
 import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-@Controller()
+@Controller({ path: '/api/v1/task', version: '1.0.0' })
 export class FindTaskController {
   constructor(private readonly useCase: TaskFindUseCase) {}
 
@@ -70,7 +70,7 @@ export class FindTaskController {
     description: 'Filter tasks by assigned user email',
   })
   @GuardWithJwt([Role.ADMIN, Role.MEMBER])
-  @Get('api/v1/task')
+  @Get()
   async getTasks(
     @Query()
     params: FindTaskParamsDto & { page: string; pageSize: string },
