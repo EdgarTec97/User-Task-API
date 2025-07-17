@@ -7,3 +7,8 @@ export const validateEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
+
+export const validateDate = (date: string): boolean => {
+  const parsedDate = Date.parse(date);
+  return !isNaN(parsedDate);
+};

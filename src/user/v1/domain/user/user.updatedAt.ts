@@ -1,4 +1,5 @@
 import { SingleValueObject } from '@/shared/domain/ddd/SingleValueObject';
+import { validateDate } from '@/shared/domain/utils/validators';
 
 export class UserUpdatedAt extends SingleValueObject<string> {
   constructor(name: string) {
@@ -6,7 +7,6 @@ export class UserUpdatedAt extends SingleValueObject<string> {
   }
 
   validate(): boolean {
-    const parsedDate = Date.parse(this.valueOf());
-    return !isNaN(parsedDate);
+    return validateDate(this.valueOf());
   }
 }
