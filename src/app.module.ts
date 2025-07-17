@@ -2,6 +2,7 @@ import { Module, ValidationPipe } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from '@/user/v1/infrastructure/bootstrap/user.module';
+import { TaskModule } from '@/task/v1/infrastructure/bootstrap/task.module';
 import { LoggingModule } from '@/shared/infrastructure/logging/logging.module';
 import { AuthModule } from '@/shared/infrastructure/jwt/jwt-service.module';
 import { DatabaseModule } from '@/shared/infrastructure/database/module';
@@ -18,6 +19,7 @@ import { DomainToInfrastructureMapper } from '@/shared/infrastructure/error-hand
     AuthModule,
     DatabaseModule,
     UserModule,
+    TaskModule,
   ],
   providers: [
     {

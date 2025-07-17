@@ -4,7 +4,7 @@ import { UserName } from '@/user/v1/domain/user/user.name';
 import { UserPassword } from '@/user/v1/domain/user/user.password';
 import { UserEmail } from '@/user/v1/domain/user/user.email';
 import { UserCreatedAt } from '@/user/v1/domain/user/user.createdAt';
-import { UserUpdatedAt } from '@/user/v1/domain/user/user.updateAt';
+import { UserUpdatedAt } from '@/user/v1/domain/user/user.updatedAt';
 import { Role } from '@/shared/domain/tokens/Role';
 
 export type UserPrimitives = ReturnType<User['toPrimitives']>;
