@@ -43,7 +43,7 @@ export class FindTaskController {
   })
   @ApiQuery({
     name: 'dueDate',
-    example: '2023-12-31',
+    example: '2025-07-17T21:56:17.245Z',
     type: String,
     required: false,
     description: 'Filter tasks by due date',

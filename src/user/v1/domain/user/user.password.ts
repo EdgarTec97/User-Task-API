@@ -6,7 +6,6 @@ export class UserPassword extends SingleValueObject<string> {
   }
 
   validate(): boolean {
-    const length: number = this.valueOf().length;
-    return length > 0 && length <= 100;
+    return true;
   }
 }
