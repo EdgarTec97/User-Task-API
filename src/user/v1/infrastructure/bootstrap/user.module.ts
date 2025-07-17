@@ -8,18 +8,21 @@ import { UserTypeOrmRepository } from '@/user/v1/infrastructure/repositories/use
 import { CreateUserController } from '@/user/v1/gateway/controllers/create-user.controller';
 import { LoginUserController } from '@/user/v1/gateway/controllers/login-user.controller';
 import { FindUserController } from '@/user/v1/gateway/controllers/find-user.controller';
+import { MeUserController } from '@/user/v1/gateway/controllers/me-user.controller';
 
 import { UserCreateUseCase } from '@/user/v1/application/use-cases/user-create.use-case';
 import { UserLoginUseCase } from '@/user/v1/application/use-cases/user-login.use-case';
 import { UserFindUseCase } from '@/user/v1/application/use-cases/user-find.use-case';
+import { UserFindOneUseCase } from '@/user/v1/application/use-cases/user-find-by.use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
-  controllers: [CreateUserController, LoginUserController, FindUserController],
+  controllers: [CreateUserController, LoginUserController, FindUserController, MeUserController],
   providers: [
     UserCreateUseCase,
     UserLoginUseCase,
     UserFindUseCase,
+    UserFindOneUseCase,
     {
       provide: USER_REPOSITORY,
       useClass: UserTypeOrmRepository,

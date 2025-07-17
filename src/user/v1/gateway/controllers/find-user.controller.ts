@@ -57,7 +57,7 @@ export class FindUserController {
   })
   @GuardWithJwt([Role.ADMIN])
   @Get('api/v1/user')
-  async createUser(@Query() { email, name, page, pageSize, role }: FindParamsDTO): Promise<UserPaginationDTO> {
+  async getUsers(@Query() { email, name, page, pageSize, role }: FindParamsDTO): Promise<UserPaginationDTO> {
     const pagination: UserPagination = UserPagination.fromPrimitives({
       page: Number(page) || 1,
       pageSize: Number(pageSize) || 10,

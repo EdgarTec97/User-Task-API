@@ -37,8 +37,8 @@ export class UserDTO {
   public updatedAt?: string;
 
   static fromDomain(user: User): UserDTO {
-    const { id, name, email, password, role, createdAt, updatedAt } = user.toPrimitives();
+    const { id, name, email, role, createdAt, updatedAt } = user.toPrimitives();
 
-    return { id, name, email, password, role, createdAt, updatedAt };
+    return { id, name, email, role, createdAt, updatedAt } as UserDTO;
   }
 }

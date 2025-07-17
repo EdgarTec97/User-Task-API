@@ -7,6 +7,7 @@ export type JwtPayload = {
   role: Role;
   email: string;
   name: string;
+  id: string;
   accessTokenRole?: Role;
 };
 
