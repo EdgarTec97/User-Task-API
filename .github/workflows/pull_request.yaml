@@ -36,6 +36,12 @@ jobs:
       POSTGRES_USER: ${{ vars.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
+      JWT_PRIVATE_KEY: ${{ vars.JWT_PRIVATE_KEY }}
+      JWT_PUBLIC_KEY: ${{ vars.JWT_PUBLIC_KEY }}
+      JWT_ALGORITHM: ${{ vars.JWT_ALGORITHM }}
+      BCRYPT_SALT_ROUNDS: ${{ vars.BCRYPT_SALT_ROUNDS }}
+      JWT_EXPIRATION_TIME: ${{ vars.JWT_EXPIRATION_TIME }}
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
