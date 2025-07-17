@@ -7,7 +7,7 @@ import { StatusResponseDTO } from '@/shared/infrastructure/meta/dtos/StatusRespo
 import { Role } from '@/shared/domain/jwt/Role';
 import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-@Controller()
+@Controller({ path: '/api/v1/task', version: '1.0.0' })
 export class DeleteTaskController {
   constructor(private readonly useCase: TaskDeleteUseCase) {}
 
@@ -23,7 +23,7 @@ export class DeleteTaskController {
     type: String,
     required: true,
   })
-  @Delete('api/v1/task/:id')
+  @Delete('/:id')
   @GuardWithJwt([Role.ADMIN])
   async deleteTask(@Param('id') id: string): Promise<StatusResponseDTO> {
     const taskId: TaskId = new TaskId(id);

@@ -14,7 +14,7 @@ export interface TaskAnalyticsResult {
   tasksCompletedThisMonth: number;
 }
 
-@Controller()
+@Controller({ path: '/api/v1/task', version: '1.0.0' })
 export class TaskAnalyticsController {
   constructor(private readonly useCase: TaskAnalyticsUseCase) {}
 
@@ -39,7 +39,7 @@ export class TaskAnalyticsController {
     },
   })
   @GuardWithJwt([Role.ADMIN])
-  @Get('api/v1/task/analytics')
+  @Get('/analytics')
   async getAnalytics(): Promise<TaskAnalyticsResult> {
     const response: TaskAnalyticsResult = await this.useCase.execute();
     return response;

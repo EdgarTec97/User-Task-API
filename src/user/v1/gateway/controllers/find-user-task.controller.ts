@@ -10,14 +10,14 @@ import { Role } from '@/shared/domain/jwt/Role';
 import { Paginated } from '@/shared/domain/utils/Paginated';
 import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-@Controller()
+@Controller({ path: 'api/v1/user', version: '1.0.0' })
 export class FindUserTaskController {
   constructor(private readonly useCase: UserTaskFindUseCase) {}
 
   @Endpoint({
     status: HttpStatus.CREATED,
     type: UserTaskPaginationDTO,
-    description: 'Find users',
+    description: 'Find users-tasks',
     tags: [DocumentationTags.USERS],
   })
   @ApiQuery({
@@ -56,7 +56,7 @@ export class FindUserTaskController {
     description: 'Filter users by role',
   })
   @GuardWithJwt([Role.ADMIN])
-  @Get('api/v1/user/task')
+  @Get('/task')
   async getUsers(@Query() { email, name, page, pageSize, role }: FindParamsDTO): Promise<UserTaskPaginationDTO> {
     const pagination: UserPagination = UserPagination.fromPrimitives({
       page: Number(page) || 1,

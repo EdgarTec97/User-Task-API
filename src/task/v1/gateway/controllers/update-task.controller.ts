@@ -9,7 +9,7 @@ import { GeneralUtils } from '@/shared/infrastructure/utils/generate';
 import { Role } from '@/shared/domain/jwt/Role';
 import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-@Controller()
+@Controller({ path: '/api/v1/task', version: '1.0.0' })
 export class UpdateTaskController {
   constructor(private readonly useCase: TaskUpdateUseCase) {}
 
@@ -29,7 +29,7 @@ export class UpdateTaskController {
     type: String,
     required: true,
   })
-  @Patch('api/v1/task/:id')
+  @Patch('/:id')
   @GuardWithJwt([Role.ADMIN, Role.MEMBER])
   async updateTask(
     @Body() { title, description, estimationHours, dueDate, status, cost, assignedUsers }: UpdateTaskDto,
