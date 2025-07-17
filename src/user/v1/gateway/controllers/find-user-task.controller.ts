@@ -56,7 +56,7 @@ export class FindUserTaskController {
     description: 'Filter users by role',
   })
   @GuardWithJwt([Role.ADMIN])
-  @Get('/task')
+  @Get('/task/stats')
   async getUsers(@Query() { email, name, page, pageSize, role }: FindParamsDTO): Promise<UserTaskPaginationDTO> {
     const pagination: UserPagination = UserPagination.fromPrimitives({
       page: Number(page) || 1,

@@ -9,7 +9,7 @@ export class SwaggerAPI {
 
   private constructor(private readonly application: INestApplication) {
     this.builder = this.buildOptions();
-    this.document = SwaggerModule.createDocument(application, this.builder.build());
+    this.document = SwaggerModule.createDocument(application, this.builder.build(), { autoTagControllers: false });
   }
 
   public register(): void {

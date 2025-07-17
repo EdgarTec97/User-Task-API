@@ -59,15 +59,9 @@ export class UserTypeOrmRepository implements IUserRepository {
       ])
       .groupBy('user.id');
 
-    if (email) {
-      queryBuilder.andWhere('user.email = :email', { email });
-    }
-    if (name) {
-      queryBuilder.andWhere('user.name ILIKE :name', { name: `${name}%` });
-    }
-    if (role) {
-      queryBuilder.andWhere('user.role = :role', { role });
-    }
+    if (email) queryBuilder.andWhere('user.email = :email', { email });
+    if (name) queryBuilder.andWhere('user.name ILIKE :name', { name: `${name}%` });
+    if (role) queryBuilder.andWhere('user.role = :role', { role });
 
     queryBuilder
       .orderBy('user.createdAt', 'DESC')
@@ -77,15 +71,10 @@ export class UserTypeOrmRepository implements IUserRepository {
     const rawResults = await queryBuilder.getRawMany();
 
     const countQuery = this.ormRepo.createQueryBuilder('user');
-    if (email) {
-      countQuery.andWhere('user.email = :email', { email });
-    }
-    if (name) {
-      countQuery.andWhere('user.name ILIKE :name', { name: `${name}%` });
-    }
-    if (role) {
-      countQuery.andWhere('user.role = :role', { role });
-    }
+
+    if (email) countQuery.andWhere('user.email = :email', { email });
+    if (name) countQuery.andWhere('user.name ILIKE :name', { name: `${name}%` });
+    if (role) countQuery.andWhere('user.role = :role', { role });
 
     const total = await countQuery.getCount();
 
