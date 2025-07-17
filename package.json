@@ -1,6 +1,6 @@
 {
   "name": "user-task-api",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "User-Task-API With NestJS and Docker",
   "author": "Edgar Castillo Vega",
   "private": true,
