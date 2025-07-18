@@ -54,3 +54,5 @@ export class UserCreatedBrokerPublisher {
     }
   }
 }
+
+export const USER_PUBLISHER_BROKER = Symbol('USER_CREATED_BROKER');

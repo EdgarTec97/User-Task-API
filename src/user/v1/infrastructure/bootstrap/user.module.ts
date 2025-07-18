@@ -22,7 +22,10 @@ import { UserFindOneUseCase } from '@/user/v1/application/use-cases/user-find-by
 import { UserUpdateUseCase } from '@/user/v1/application/use-cases/user-update.use-case';
 import { UserTaskFindUseCase } from '@/user/v1/application/use-cases/user-task-find.use.case';
 
-import { UserCreatedBrokerPublisher } from '@/user/v1/infrastructure/events/user-created.broker-publisher';
+import {
+  UserCreatedBrokerPublisher,
+  USER_PUBLISHER_BROKER,
+} from '@/user/v1/infrastructure/events/user-created.broker-publisher';
 import { UserCreatedBrokerSubscriber } from '@/user/v1/infrastructure/events/user-created.broker-subscriber';
 
 @Module({
@@ -43,14 +46,17 @@ import { UserCreatedBrokerSubscriber } from '@/user/v1/infrastructure/events/use
     UserFindOneUseCase,
     UserUpdateUseCase,
     UserTaskFindUseCase,
-    UserCreatedBrokerPublisher,
     UserCreatedBrokerSubscriber,
     Logger,
     {
       provide: USER_REPOSITORY,
       useClass: UserTypeOrmRepository,
     },
+    {
+      provide: USER_PUBLISHER_BROKER,
+      useClass: UserCreatedBrokerPublisher,
+    },
   ],
-  exports: [USER_REPOSITORY],
+  exports: [USER_REPOSITORY, USER_PUBLISHER_BROKER],
 })
 export class UserModule {}

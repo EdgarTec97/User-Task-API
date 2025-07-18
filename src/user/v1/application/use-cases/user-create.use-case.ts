@@ -2,7 +2,10 @@ import { Inject, Injectable, ConflictException } from '@nestjs/common';
 import { User, UserPrimitives } from '@/user/v1/domain/user/user';
 import { IUserRepository, USER_REPOSITORY } from '@/user/v1/domain/ports/user.repository';
 import { ENCRYPTION_SERVICE, IEncryptionService } from '@/shared/domain/encryption/encryption.service';
-import type { UserCreatedBrokerPublisher } from '@/user/v1/infrastructure/events/user-created.broker-publisher';
+import {
+  UserCreatedBrokerPublisher,
+  USER_PUBLISHER_BROKER,
+} from '@/user/v1/infrastructure/events/user-created.broker-publisher';
 import type { UserCreatedEvent } from '@/user/v1/domain/events/user-created.event';
 
 @Injectable()
@@ -12,6 +15,7 @@ export class UserCreateUseCase {
     private repository: IUserRepository,
     @Inject(ENCRYPTION_SERVICE)
     private readonly hasher: IEncryptionService,
+    @Inject(USER_PUBLISHER_BROKER)
     private readonly userCreatedPublisher: UserCreatedBrokerPublisher,
   ) {}
 
