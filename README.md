@@ -447,3 +447,15 @@ The project includes a comprehensive suite of tests to ensure code quality and f
   ```bash
   pnpm test:debug
   ```
+
+## 💻 Swagger API
+
+![Image text](https://edgar-serverless-bucket.s3.us-east-2.amazonaws.com/swagger.png)
+
+## 💻 Workflow API
+
+![Image text](https://edgar-serverless-bucket.s3.us-east-2.amazonaws.com/user_creation_flow.pngg)
+
+## 💻 Architecture API
+
+![Image text](https://edgar-serverless-bucket.s3.us-east-2.amazonaws.com/architecture_diagram.png)
