@@ -506,7 +506,7 @@ The project includes a comprehensive suite of tests to ensure code quality and f
 
 ## 💻 Workflow API
 
-![Image text](https://edgar-serverless-bucket.s3.us-east-2.amazonaws.com/user_creation_flow.pngg)
+![Image text](https://edgar-serverless-bucket.s3.us-east-2.amazonaws.com/user_creation_flow.png)
 
 ## 💻 Architecture API
 
