@@ -52,9 +52,11 @@ WORKDIR /app
 
 # Prod deps & compiled app
 COPY package.json pnpm-lock.yaml ./
+COPY tsconfig.json tsconfig.build.json ./
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/scripts ./scripts
+COPY --from=build /app/src ./src
 
 # (Optional) static env file
 COPY .env .env
@@ -68,5 +70,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=10s CMD \
 # ─────────────────────────────────────────────────────────────────────────────
 # Start‑up command: run migrations then the API
 # ─────────────────────────────────────────────────────────────────────────────
-RUN pnpm migrate generate GeneralMigration
-CMD ["sh","-c","pnpm migrate up && node dist/src/main.js"]
+CMD ["node","dist/main.js"]

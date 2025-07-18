@@ -24,7 +24,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "containers:up": "docker compose up -d --build",
     "containers:down": "docker compose down",
-    "containers:app": "docker-compose up -d --build app",
+    "containers:app": "node scripts/compose.js && pnpm migrate generate GeneralMigration && pnpm migrate up",
     "prepare": "husky"
   },
   "engine": {

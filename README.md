@@ -163,6 +163,109 @@ Beyond the `shared` module, other domain-specific modules (e.g., `user`, `task`)
 
   This structure ensures that the core application logic remains decoupled from the specifics of the web framework, allowing for easier changes to the presentation layer if needed.
 
+### Additional Architectural Features
+
+Depending on evolving requirements, the following capabilities can be seamlessly integrated without disrupting existing modules:
+
+#### Scheduled Tasks with Cron Jobs
+
+The project can leverage the `@nestjs/schedule` package to run background tasks at fixed intervals (e.g., cleanup scripts, report generation, or periodic synchronizations).
+
+```typescript
+// src/task/application/jobs/sample.job.ts
+import { Injectable } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
+
+@Injectable()
+export class SampleCronJob {
+  // Runs every day at midnight
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  handleCron(): void {
+    // Business logic here
+    console.log('🕛 Running daily task at midnight');
+  }
+}
+```
+
+To enable cron jobs, register the **ScheduleModule** in your feature module:
+
+```typescript
+// src/task/task.module.ts
+import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
+import { SampleCronJob } from './application/jobs/sample.job';
+
+@Module({
+  imports: [ScheduleModule.forRoot()],
+  providers: [SampleCronJob],
+})
+export class TaskModule {}
+```
+
+> **Tip:** Cron jobs adhere to the same modular and DDD boundaries—keep job logic in the _application_ layer and only orchestrate domain services.
+
+#### CQRS with CommandBus and QueryBus
+
+If read and write workloads must scale independently, **CQRS (Command Query Responsibility Segregation)** can be adopted using NestJS's `@nestjs/cqrs` package. This separates write operations (commands) from read operations (queries) while maintaining a clean domain model.
+
+```typescript
+// src/user/application/commands/create-user.command.ts
+export class CreateUserCommand {
+  constructor(
+    public readonly email: string,
+    public readonly password: string,
+  ) {}
+}
+
+// src/user/application/handlers/create-user.handler.ts
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CreateUserCommand } from '../commands/create-user.command';
+
+@CommandHandler(CreateUserCommand)
+export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
+  async execute(command: CreateUserCommand): Promise<void> {
+    const { email, password } = command;
+    // TODO: delegate to domain service / aggregate
+  }
+}
+
+// src/user/application/queries/get-user.query.ts
+export class GetUserQuery {
+  constructor(public readonly id: string) {}
+}
+
+// src/user/application/handlers/get-user.handler.ts
+import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+import { GetUserQuery } from '../queries/get-user.query';
+
+@QueryHandler(GetUserQuery)
+export class GetUserHandler implements IQueryHandler<GetUserQuery> {
+  async execute(query: GetUserQuery): Promise<UserDto> {
+    const { id } = query;
+    // TODO: fetch and return user data
+    return {} as UserDto;
+  }
+}
+
+// src/user/user.module.ts
+import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
+import { CreateUserHandler } from './application/handlers/create-user.handler';
+import { GetUserHandler } from './application/handlers/get-user.handler';
+
+@Module({
+  imports: [CqrsModule],
+  providers: [CreateUserHandler, GetUserHandler],
+})
+export class UserModule {}
+
+// Example usage inside a controller
+await this.commandBus.execute(new CreateUserCommand(email, password));
+const user = await this.queryBus.execute(new GetUserQuery(id));
+```
+
+By introducing CQRS only where necessary (high‑throughput write paths or complex read models), the codebase stays lightweight while providing the flexibility to evolve into more sophisticated patterns (event sourcing, snapshotting) later.
+
 ### Services Used
 
 This project leverages several external services to provide robust and scalable functionality:
