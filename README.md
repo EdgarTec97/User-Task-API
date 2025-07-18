@@ -414,6 +414,58 @@ This project uses environment variables for configuration. A `.env` file should 
 
 It is crucial to configure these variables correctly for the application and its services to function as expected.
 
+## Advanced Clustering Flow
+
+> **Purpose:** Scale a Node/Nest application horizontally—one worker per CPU core—while an **internal load‑balancing master** evenly distributes incoming traffic.  
+> Result: a resilient architecture capable of handling **high‑throughput** workloads with minimal latency spikes.
+
+### How It Works
+
+1. **Primary (Master) Process**
+
+   - Detects the total number of logical CPU cores (`os.cpus().length`).
+   - Forks a **worker** for each core via Node’s native `cluster` module.
+   - Acts as an **internal load balancer**, accepting incoming connections and routing them to the least‑busy worker in a round‑robin fashion.
+   - Listens for the `'exit'` event; any crashed worker is **automatically respawned** to maintain full capacity.
+
+2. **Worker Processes**
+   - Each worker boots a full instance of your NestJS application (or any Node server).
+   - All workers share the **same TCP port**, but their sockets are managed by the master, preventing port conflicts.
+   - If a worker encounters an unhandled exception and exits, the master transparently replaces it without downtime.
+
+### Benefits
+
+| Feature                 | Impact                                                     |
+| ----------------------- | ---------------------------------------------------------- |
+| Multi‑core utilisation  | Leverages **all CPU cores** instead of a single thread.    |
+| Built‑in load balancing | Master process balances requests without external proxies. |
+| Fault tolerance         | Automatic worker **respawn** maintains availability.       |
+| Zero code changes       | Application logic remains agnostic to clustering.          |
+
+### When to Use
+
+- APIs expected to receive **thousands of concurrent requests**.
+- Workloads with **CPU‑bound** or blocking operations where a single event loop becomes a bottleneck.
+- Environments where external load balancers (e.g., Nginx, HAProxy) are not yet introduced but horizontal scaling is required.
+
+### Quick Start
+
+````ts
+// main.ts
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { AppClusterService } from './app-cluster.service';
+
+async function bootstrap(): Promise<number> {
+  const app  = await NestFactory.create(AppModule);
+  const port = Number(process.env.PORT) || 3000;
+  await app.listen(port);
+  return port;
+}
+
+AppClusterService.clusterize(bootstrap);
+
+
 ## Testing
 
 The project includes a comprehensive suite of tests to ensure code quality and functionality. Jest is used as the testing framework.
@@ -422,7 +474,7 @@ The project includes a comprehensive suite of tests to ensure code quality and f
 
   ```bash
   pnpm test
-  ```
+````
 
 - **Run tests in watch mode** (re-runs tests when files change):
 
