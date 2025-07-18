@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from '@/app.module';
 import { SwaggerAPI } from '@/shared/infrastructure/openapi/swagger.api';
+import { AppClusterService } from '@/cluster';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,4 @@ async function bootstrap() {
   return port;
 }
 
-bootstrap()
-  .then((port: number) => console.log(`Application is running on port:${port}`))
-  .catch((error) => console.error('Error starting the application:', error));
+AppClusterService.clusterize(bootstrap);
