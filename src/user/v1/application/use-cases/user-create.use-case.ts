@@ -2,6 +2,11 @@ import { Inject, Injectable, ConflictException } from '@nestjs/common';
 import { User, UserPrimitives } from '@/user/v1/domain/user/user';
 import { IUserRepository, USER_REPOSITORY } from '@/user/v1/domain/ports/user.repository';
 import { ENCRYPTION_SERVICE, IEncryptionService } from '@/shared/domain/encryption/encryption.service';
+import {
+  UserCreatedBrokerPublisher,
+  USER_PUBLISHER_BROKER,
+} from '@/user/v1/infrastructure/events/user-created.broker-publisher';
+import type { UserCreatedEvent } from '@/user/v1/domain/events/user-created.event';
 
 @Injectable()
 export class UserCreateUseCase {
@@ -10,7 +15,10 @@ export class UserCreateUseCase {
     private repository: IUserRepository,
     @Inject(ENCRYPTION_SERVICE)
     private readonly hasher: IEncryptionService,
+    @Inject(USER_PUBLISHER_BROKER)
+    private readonly userCreatedPublisher: UserCreatedBrokerPublisher,
   ) {}
+
   async execute(user: User): Promise<void> {
     const existingUser: User | void = await this.repository.findByEmail(user.getEmail().valueOf());
 
@@ -19,6 +27,10 @@ export class UserCreateUseCase {
     const primitives: UserPrimitives = user.toPrimitives();
     primitives.password = await this.hasher.hash(user.getPassword().valueOf());
 
-    return await this.repository.save(primitives);
+    await this.repository.save(primitives);
+
+    user.buildEvents();
+
+    await this.userCreatedPublisher.publishBatch(user.pullDomainEvents() as UserCreatedEvent[]);
   }
 }

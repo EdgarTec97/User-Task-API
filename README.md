@@ -1,99 +1,461 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# User Task API (Challenge)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a comprehensive documentation for the application. It outlines the necessary technologies, setup instructions, and architectural overview.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Technologies
 
-## Description
+To run and develop this project, the following technologies are required:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Node.js**: `>=20.0.0 <21.0.0`
+- **Docker**: `v28`
+- **Docker Compose**: `v2`
+- **NestJS**: `v11`
 
-## Project setup
+## Setup Instructions
+
+Follow these steps to set up and run the project locally:
+
+1.  **Install Dependencies**
+
+    Use pnpm to install all project dependencies:
+
+    ```bash
+    pnpm install
+    ```
+
+2.  **Start Service Containers**
+
+    Bring up the necessary service containers (PostgreSQL, Redis, Kafka, Zookeeper) using Docker Compose:
+
+    ```bash
+    pnpm containers:up
+    ```
+
+3.  **Build the Application**
+
+    Compile the NestJS application:
+
+    ```bash
+    pnpm build
+    ```
+
+4.  **Generate Database Migrations**
+
+    Generate a new database migration. Replace `GeneralMigration` with a descriptive name for your migration:
+
+    ```bash
+    pnpm migrate generate GeneralMigration
+    ```
+
+5.  **Run Database Migrations**
+
+    Apply the pending database migrations to your PostgreSQL database:
+
+    ```bash
+    pnpm migrate up
+    ```
+
+6.  **Start the Application in Production Mode**
+
+    Launch the NestJS application in production mode:
+
+    ```bash
+    pnpm start:prod
+    ```
+
+### Running the Application with Docker
+
+If you prefer to run the application directly within a Docker container, you can use the following command after setting up the service containers:
 
 ```bash
-$ pnpm install
-$ npx husky install
+pnpm containers:app
 ```
 
-## Compile and run the project
+## Architecture
 
-```bash
-# development
-$ pnpm run start
+This project is built following a **Clean Architecture** approach, emphasizing separation of concerns and testability. It adopts a **modular design** with **Hexagonal Architecture** and **Domain-Driven Design (DDD)** principles.
 
-# watch mode
-$ pnpm run start:dev
+### Core Principles
 
-# production mode
-$ pnpm run start:prod
+- **Clean Architecture**: The architecture is organized into concentric layers, with the innermost layers being independent of the outermost layers. This ensures that business rules are not coupled to external frameworks or databases.
+- **Modular Design**: The application is divided into distinct, self-contained modules (e.g., `user`, `task`), each responsible for a specific domain area. This promotes maintainability and scalability.
+- **Hexagonal Architecture (Ports and Adapters)**: This pattern ensures that the application's core logic is isolated from external concerns like databases, UI, or third-party services. The core application interacts with the outside world through 'ports' (interfaces), and 'adapters' implement these ports for specific technologies.
+- **Domain-Driven Design (DDD)**: The design focuses on a rich understanding of the domain, with concepts like Entities, Value Objects, Aggregates, and Domain Services being central to the codebase.
+
+### Layered Structure
+
+The project's directory structure reflects its architectural layers. You will observe a distinct layering, particularly within the `shared` module and other domain-specific modules.
+
+#### Shared Module Layers
+
+The `shared` module, which contains common functionalities and foundational elements, is structured into three primary layers:
+
+1.  **Domain Layer (`src/shared/domain`)**:
+
+    This is the core of the application, containing the enterprise-wide business rules. It is independent of any external concerns. This layer includes:
+
+    - **Entities**: Represent business objects with a distinct identity.
+    - **Value Objects**: Describe characteristics of a thing.
+    - **Domain Services**: Operations that don't naturally fit within an Entity or Value Object.
+    - **Repositories Interfaces**: Define contracts for data persistence, without specifying implementation details.
+
+    ```
+    src/shared/domain/
+    ├── exceptions/
+    ├── interfaces/
+    ├── models/
+    └── value-objects/
+    ```
+
+2.  **Application Layer (`src/shared/application`)**:
+
+    This layer orchestrates the domain objects to perform specific use cases. It contains application-specific business rules and depends on the Domain layer but is independent of the Infrastructure layer. This layer typically includes:
+
+    - **Application Services**: Coordinate domain objects to fulfill use cases.
+    - **DTOs (Data Transfer Objects)**: Used for data input and output.
+    - **Queries and Commands**: Part of CQRS (Command Query Responsibility Segregation) pattern, separating read and write models.
+
+    ```
+    src/shared/application/
+    ├── commands/
+    ├── dtos/
+    ├── queries/
+    └── services/
+    ```
+
+3.  **Infrastructure Layer (`src/shared/infrastructure`)**:
+
+    This layer deals with external concerns such as databases, external APIs, and frameworks. It implements the interfaces defined in the Domain layer. This layer includes:
+
+    - **Persistence Implementations**: Concrete implementations of repository interfaces (e.g., TypeORM repositories for PostgreSQL).
+    - **External Service Integrations**: Adapters for interacting with third-party services.
+    - **Framework-specific code**: NestJS modules, providers, and controllers that handle HTTP requests and responses.
+
+    ```
+    src/shared/infrastructure/
+    ├── database/
+    ├── openapi/
+    ├── services/
+    └── utils/
+    ```
+
+#### Module-Specific Gateway Layer
+
+Beyond the `shared` module, other domain-specific modules (e.g., `user`, `task`) introduce an additional layer called `gateway`. This layer is specifically designed to handle external incoming information, primarily HTTP requests.
+
+- **Gateway Layer (`src/[module]/v1/gateway`)**:
+
+  This layer acts as the entry point for external interactions. It is responsible for:
+
+  - **Request Handling**: Receiving and validating incoming HTTP requests.
+  - **Data Transformation**: Converting external request data into application-layer DTOs.
+  - **Response Formatting**: Transforming application-layer output into appropriate HTTP responses.
+  - **API Endpoints**: Defining the routes and controllers for the module's API.
+
+  For example, within the `user` module, you would find:
+
+  ```
+  src/user/v1/gateway/
+  ├── controllers/
+  ├── dtos/
+  └── guards/
+  ```
+
+  This structure ensures that the core application logic remains decoupled from the specifics of the web framework, allowing for easier changes to the presentation layer if needed.
+
+### Additional Architectural Features
+
+Depending on evolving requirements, the following capabilities can be seamlessly integrated without disrupting existing modules:
+
+#### Scheduled Tasks with Cron Jobs
+
+The project can leverage the `@nestjs/schedule` package to run background tasks at fixed intervals (e.g., cleanup scripts, report generation, or periodic synchronizations).
+
+```typescript
+// src/task/application/jobs/sample.job.ts
+import { Injectable } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
+
+@Injectable()
+export class SampleCronJob {
+  // Runs every day at midnight
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  handleCron(): void {
+    // Business logic here
+    console.log('🕛 Running daily task at midnight');
+  }
+}
 ```
 
-## Run tests
+To enable cron jobs, register the **ScheduleModule** in your feature module:
 
-```bash
-# unit tests
-$ pnpm run test
+```typescript
+// src/task/task.module.ts
+import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
+import { SampleCronJob } from './application/jobs/sample.job';
 
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+@Module({
+  imports: [ScheduleModule.forRoot()],
+  providers: [SampleCronJob],
+})
+export class TaskModule {}
 ```
 
-## Deployment
+> **Tip:** Cron jobs adhere to the same modular and DDD boundaries—keep job logic in the _application_ layer and only orchestrate domain services.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+#### CQRS with CommandBus and QueryBus
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+If read and write workloads must scale independently, **CQRS (Command Query Responsibility Segregation)** can be adopted using NestJS's `@nestjs/cqrs` package. This separates write operations (commands) from read operations (queries) while maintaining a clean domain model.
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+```typescript
+// src/user/application/commands/create-user.command.ts
+export class CreateUserCommand {
+  constructor(
+    public readonly email: string,
+    public readonly password: string,
+  ) {}
+}
+
+// src/user/application/handlers/create-user.handler.ts
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CreateUserCommand } from '../commands/create-user.command';
+
+@CommandHandler(CreateUserCommand)
+export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
+  async execute(command: CreateUserCommand): Promise<void> {
+    const { email, password } = command;
+    // TODO: delegate to domain service / aggregate
+  }
+}
+
+// src/user/application/queries/get-user.query.ts
+export class GetUserQuery {
+  constructor(public readonly id: string) {}
+}
+
+// src/user/application/handlers/get-user.handler.ts
+import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
+import { GetUserQuery } from '../queries/get-user.query';
+
+@QueryHandler(GetUserQuery)
+export class GetUserHandler implements IQueryHandler<GetUserQuery> {
+  async execute(query: GetUserQuery): Promise<UserDto> {
+    const { id } = query;
+    // TODO: fetch and return user data
+    return {} as UserDto;
+  }
+}
+
+// src/user/user.module.ts
+import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
+import { CreateUserHandler } from './application/handlers/create-user.handler';
+import { GetUserHandler } from './application/handlers/get-user.handler';
+
+@Module({
+  imports: [CqrsModule],
+  providers: [CreateUserHandler, GetUserHandler],
+})
+export class UserModule {}
+
+// Example usage inside a controller
+await this.commandBus.execute(new CreateUserCommand(email, password));
+const user = await this.queryBus.execute(new GetUserQuery(id));
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+By introducing CQRS only where necessary (high‑throughput write paths or complex read models), the codebase stays lightweight while providing the flexibility to evolve into more sophisticated patterns (event sourcing, snapshotting) later.
 
-## Resources
+### Services Used
 
-Check out a few resources that may come in handy when working with NestJS:
+This project leverages several external services to provide robust and scalable functionality:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- **PostgreSQL**:
 
-## Support
+  Used as the primary relational database for storing and managing application data. It provides reliability, data integrity, and powerful querying capabilities.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+  _Configuration in `docker-compose.yml`:_
 
-## Stay in touch
+  ```yaml
+  postgres:
+    container_name: postgres_${PROJECT_NAME}
+    image: postgres:14.5-alpine
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_ROL=${POSTGRES_ROL}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=/data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - \'${POSTGRES_PORT}:5432\'
+    networks:
+      - users-api
+    restart: always
+  ```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **Redis**:
 
-## License
+  Integrated for caching information from certain flows. This significantly improves response times and overall application performance by reducing the load on the primary database.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+  _Configuration in `docker-compose.yml`:_
+
+  ```yaml
+  redis:
+    container_name: redis-${PROJECT_NAME}
+    image: bitnami/redis:6.2.7
+    restart: always
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - redis:/var/lib/redis
+      - redis-config:/usr/local/etc/redis/redis.conf
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+      - users-api
+  ```
+
+- **Kafka & Zookeeper**:
+
+  These are used to implement an **event-driven architecture**, specifically for the user creation flow. Kafka acts as a distributed streaming platform, enabling asynchronous communication and decoupling of services, while Zookeeper manages Kafka brokers.
+
+  _Configuration in `docker-compose.yml`:_
+
+  ```yaml
+  zookeeper:
+    container_name: zookeeper-${PROJECT_NAME}
+    image: \'bitnami/zookeeper:3.8.0\'
+    restart: always
+    ports:
+      - ${ZOOKEEPER_PORT}:2181
+    networks:
+      - users-api
+    volumes:
+      - kafka:/data/zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    container_name: kafka-${PROJECT_NAME}
+    image: \'bitnami/kafka:3.1.0\'
+    restart: always
+    ports:
+      - ${KAFKA_PORT}:9092
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:${ZOOKEEPER_PORT}
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:${KAFKA_PORT}
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    networks:
+      - users-api
+    volumes:
+      - kafka:/data/kafka
+  ```
+
+- **Swagger**:
+
+  Used for comprehensive API documentation. Once the application is running, you can access the interactive API documentation at the `/api` endpoint. This allows developers to understand, test, and interact with the API endpoints easily.
+
+  _Integration in `src/main.ts`:_
+
+  ```typescript
+  import { NestFactory } from \'@nestjs/core\';
+  import { ConfigService } from \'@nestjs/config\';
+  import { AppModule } from \'@/app.module\';
+  import { SwaggerAPI } from \'@/shared/infrastructure/openapi/swagger.api\';
+
+  async function bootstrap() {
+    const app = await NestFactory.create(AppModule);
+    const config: ConfigService = app.get(ConfigService);
+    const port: number = config.get<number>(\'PORT\') || 3000;
+
+    app.enableCors();
+
+    SwaggerAPI.setup(app);
+
+    await app.listen(port);
+    return port;
+  }
+
+  bootstrap()
+    .then((port: number) => console.log(`Application is running on port:${port}`))
+    .catch((error) => console.error(\'Error starting the application:\', error));
+  ```
+
+## Further Documentation
+
+This section will be expanded with more details based on further code analysis. This may include:
+
+- Detailed API Endpoints and Usage
+- Environment Variables
+- Testing Guidelines
+- Deployment Information
+- Contribution Guidelines
+
+## Environment Variables
+
+This project uses environment variables for configuration. A `.env` file should be created in the root directory of the project, based on the `.env.example` (if available) or the variables used in `docker-compose.yml` and the application code. Below are the key environment variables identified:
+
+- `PROJECT_NAME`: Name of the project, used for naming Docker containers.
+- `PROJECT_PORT`: Port on which the NestJS application will run.
+- `POSTGRES_DB`: Database name for PostgreSQL.
+- `POSTGRES_USER`: Username for PostgreSQL database access.
+- `POSTGRES_ROL`: Role for PostgreSQL database access.
+- `POSTGRES_PASSWORD`: Password for PostgreSQL database access.
+- `POSTGRES_PORT`: Port for PostgreSQL database.
+- `PGADMIN_DEFAULT_EMAIL`: Default email for pgAdmin login.
+- `PGADMIN_DEFAULT_PASSWORD`: Default password for pgAdmin login.
+- `REDIS_PASSWORD`: Password for Redis.
+- `REDIS_PORT`: Port for Redis.
+- `REDIS_COMMANDER_USER`: Username for Redis Commander.
+- `REDIS_COMMANDER_PASSWORD`: Password for Redis Commander.
+- `ZOOKEEPER_PORT`: Port for Zookeeper.
+- `KAFKA_PORT`: Port for Kafka.
+
+It is crucial to configure these variables correctly for the application and its services to function as expected.
+
+## Testing
+
+The project includes a comprehensive suite of tests to ensure code quality and functionality. Jest is used as the testing framework.
+
+- **Run all tests**:
+
+  ```bash
+  pnpm test
+  ```
+
+- **Run tests in watch mode** (re-runs tests when files change):
+
+  ```bash
+  pnpm test:watch
+  ```
+
+- **Generate test coverage report**:
+
+  ```bash
+  pnpm test:cov
+  ```
+
+- **Run end-to-end tests**:
+
+  ```bash
+  pnpm test:e2e
+  ```
+
+- **Debug tests**:
+
+  ```bash
+  pnpm test:debug
+  ```
+
+## 💻 Swagger API
+
+![Image text](https://edgar-serverless-bucket.s3.us-east-2.amazonaws.com/swagger.png)
+
+## 💻 Workflow API
+
+![Image text](https://edgar-serverless-bucket.s3.us-east-2.amazonaws.com/user_creation_flow.pngg)
+
+## 💻 Architecture API
+
+![Image text](https://edgar-serverless-bucket.s3.us-east-2.amazonaws.com/architecture_diagram.png)

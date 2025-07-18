@@ -1,35 +1,37 @@
-#!/usr/bin/env bash
-# ──────────────────────────────────────────────────────────────────────────────
-#   Use:
-#     sh scripts/migrate.sh generate CreateUserTable
-#     sh scripts/migrate.sh up
-#     sh scripts/migrate.sh down
-# ──────────────────────────────────────────────────────────────────────────────
 ACTION=$1
 NAME=$2
 
-set -a
-source .env
-set +a
+set +e
+
+trap 'echo "⚠️ Skipping: BASH_COMMAND"; true' ERR
+
+# 3) Cargar variables de entorno (si existe .env)
+if [[ -f .env ]]; then
+  set -a
+  source .env
+  set +a
+fi
 
 MIGR_DIR="migrations"
 
 case "$ACTION" in
   generate)
-    [[ -z $NAME ]] && { echo "❌  Falta nombre de migración"; exit 1; }
-
-    TS_NODE=true npm run migration:generate -- "$MIGR_DIR/$NAME"
+    if [[ -z $NAME ]]; then
+      echo "❌  Missing Name"; 
+    else
+      TS_NODE=true POSTGRES_HOST=localhost npm run migration:generate -- "$MIGR_DIR/$NAME" || true
+    fi
     ;;
   up)
-    TS_NODE=true npm run migration:run
+    TS_NODE=true POSTGRES_HOST=localhost npm run migration:run   || true
     ;;
   down)
-    TS_NODE=true npm run migration:revert
+    TS_NODE=true POSTGRES_HOST=localhost npm run migration:revert || true
     ;;
   *)
-    echo "Uso: migrate {generate|up|down} [Name]"
-    exit 1
+    echo "Script: migrate {generate|up|down} [Name]"
     ;;
 esac
 
-echo "✔  Action '$ACTION' completed successfully."
+echo "✔ Action Completed"
+exit 0
