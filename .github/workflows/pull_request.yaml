@@ -31,6 +31,17 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+      redis:
+        image: redis:7-alpine
+        env:
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     env:
       NODE_ENV: test
       PROJECT_MODE: test
@@ -47,6 +58,12 @@ jobs:
       JWT_ALGORITHM: ${{ vars.JWT_ALGORITHM }}
       BCRYPT_SALT_ROUNDS: ${{ vars.BCRYPT_SALT_ROUNDS }}
       JWT_EXPIRATION_TIME: ${{ vars.JWT_EXPIRATION_TIME }}
+
+      REDIS_IS_SECURE: ${{ vars.REDIS_IS_SECURE }}
+      REDIS_HOSTNAME: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+      REDIS_DB: ${{ vars.REDIS_DB }}
 
     steps:
       - uses: actions/checkout@v3
