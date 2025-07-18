@@ -11,7 +11,7 @@ export class UserCreatedEvent extends DomainEvent {
   public static readonly EVENT_NAME = 'user.created';
 
   constructor(
-    eventId: string,
+    private readonly eventId: string,
     private readonly userId: UserId,
     private readonly userName: UserName,
     private readonly userEmail: UserEmail,
@@ -32,6 +32,10 @@ export class UserCreatedEvent extends DomainEvent {
       new UserCreatedAt(primitives.userCreatedAt),
       new Date(primitives.occurredOn),
     );
+  }
+
+  public getId(): string {
+    return this.eventId;
   }
 
   public getUserId(): UserId {
