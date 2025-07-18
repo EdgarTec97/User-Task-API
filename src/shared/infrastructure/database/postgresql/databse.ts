@@ -17,8 +17,7 @@ export class DatabaseConfigService implements TypeOrmOptionsFactory {
       entities: ['dist/**/*.entity.js'],
       migrations: ['dist/migrations/*.js'],
       migrationsTableName: 'typeorm_migrations',
-      logging:
-        this.config.get('PROJECT_MODE') === 'development' ? 'all' : false,
+      logging: this.config.get('PROJECT_MODE') === 'development' ? 'all' : false,
       maxQueryExecutionTime: 2000,
       synchronize: false,
       ssl: false,

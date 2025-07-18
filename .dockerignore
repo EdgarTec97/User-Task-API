@@ -1,0 +1,10 @@
+# Only keep what the Dockerfile actually copies
+node_modules
+dist
+Dockerfile*
+docker-compose.yml
+.git
+.gitignore
+.vscode
+test
+coverage
