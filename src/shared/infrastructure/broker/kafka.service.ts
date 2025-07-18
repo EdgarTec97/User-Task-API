@@ -1,7 +1,8 @@
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Kafka, Producer, Consumer, EachMessagePayload } from 'kafkajs';
 import { KafkaConfigService } from '@/shared/infrastructure/broker/kafka.config';
 import { IBrokerService, KafkaMessage, KafkaSubscriptionOptions } from '@/shared/domain/broker/broker.service';
+import { BROKER_CONFIG_TOKEN } from '@/shared/domain/broker/config.service';
 
 @Injectable()
 export class KafkaService implements OnModuleInit, OnModuleDestroy, IBrokerService {
@@ -10,11 +11,12 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy, IBrokerServi
   private consumers: Map<string, Consumer> = new Map();
 
   constructor(
-    private readonly kafkaConfig: KafkaConfigService,
+    @Inject(BROKER_CONFIG_TOKEN)
+    private readonly brokerConfig: KafkaConfigService,
     private readonly logger: Logger,
   ) {
-    this.kafka = new Kafka(this.kafkaConfig.getBrokerConfig());
-    this.producer = this.kafka.producer(this.kafkaConfig.getProducerConfig());
+    this.kafka = new Kafka(this.brokerConfig.getBrokerConfig());
+    this.producer = this.kafka.producer(this.brokerConfig.getProducerConfig());
   }
 
   async onModuleInit(): Promise<void> {
@@ -76,7 +78,7 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy, IBrokerServi
     }
 
     try {
-      const consumer = this.kafka.consumer(this.kafkaConfig.getConsumerConfig(groupId));
+      const consumer = this.kafka.consumer(this.brokerConfig.getConsumerConfig(groupId));
 
       await consumer.connect();
       await consumer.subscribe({ topic, fromBeginning });

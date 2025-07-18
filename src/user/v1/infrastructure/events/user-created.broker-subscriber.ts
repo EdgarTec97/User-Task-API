@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BROKER_SERVICE_TOKEN, IBrokerService } from '@/shared/domain/broker/broker.service';
-import { KafkaConfigService } from '@/shared/infrastructure/broker/kafka.config';
+import { BROKER_CONFIG_TOKEN, IBrokerConfigService } from '@/shared/domain/broker/config.service';
 import { UserCreatedEventDto } from '@/user/v1/gateway/dtos/events/user-created-event.dto';
 import type { EachMessagePayload } from '@/shared/domain/broker/primitives';
 
@@ -13,7 +13,8 @@ export class UserCreatedBrokerSubscriber implements OnModuleInit {
   constructor(
     @Inject(BROKER_SERVICE_TOKEN)
     private readonly brokerService: IBrokerService,
-    private readonly kafkaConfig: KafkaConfigService,
+    @Inject(BROKER_CONFIG_TOKEN)
+    private readonly brokerConfig: IBrokerConfigService,
     private readonly logger: Logger,
     readonly config: ConfigService,
   ) {
@@ -27,12 +28,12 @@ export class UserCreatedBrokerSubscriber implements OnModuleInit {
 
   private async subscribeToUserCreatedEvents(): Promise<void> {
     try {
-      const topics: { USER_EVENTS: string } = this.kafkaConfig.getTopics();
+      const topics: { EVENTS: string } = this.brokerConfig.getTopics();
 
       // Create topic if it doesn't exist
       await this.brokerService.createTopics([
         {
-          topic: topics.USER_EVENTS,
+          topic: topics.EVENTS,
           numPartitions: 3,
           replicationFactor: 1,
         },
@@ -41,7 +42,7 @@ export class UserCreatedBrokerSubscriber implements OnModuleInit {
       // Subscribe to the topic
       await this.brokerService.subscribe(
         {
-          topic: topics.USER_EVENTS,
+          topic: topics.EVENTS,
           groupId: this.CONSUMER_GROUP_ID,
           fromBeginning: false,
         },
@@ -49,7 +50,7 @@ export class UserCreatedBrokerSubscriber implements OnModuleInit {
       );
 
       this.logger.log(
-        `Subscribed to ${topics.USER_EVENTS} topic with group ${this.CONSUMER_GROUP_ID}`,
+        `Subscribed to ${topics.EVENTS} topic with group ${this.CONSUMER_GROUP_ID}`,
         UserCreatedBrokerSubscriber.name,
       );
     } catch (error) {

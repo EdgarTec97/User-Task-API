@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { KafkaConfig, ProducerConfig, ConsumerConfig } from 'kafkajs';
+import { IBrokerConfigService } from '@/shared/domain/broker/config.service';
 
 @Injectable()
-export class KafkaConfigService {
+export class KafkaConfigService implements IBrokerConfigService {
   constructor(private readonly configService: ConfigService) {}
 
-  getBrokerConfig(): KafkaConfig {
+  public getBrokerConfig(): KafkaConfig {
     return {
       clientId: this.configService.get<string>('KAFKA_CLIENT_ID', 'nestjs-app'),
       brokers: this.configService.get<string>('KAFKA_BROKERS', 'localhost:9092').split(','),
@@ -26,7 +27,7 @@ export class KafkaConfigService {
     };
   }
 
-  getProducerConfig(): ProducerConfig {
+  public getProducerConfig(): ProducerConfig {
     return {
       maxInFlightRequests: 1,
       idempotent: true,
@@ -38,7 +39,7 @@ export class KafkaConfigService {
     };
   }
 
-  getConsumerConfig(groupId: string): ConsumerConfig {
+  public getConsumerConfig(groupId: string): ConsumerConfig {
     return {
       groupId,
       sessionTimeout: 30000,
@@ -51,9 +52,9 @@ export class KafkaConfigService {
     };
   }
 
-  getTopics() {
+  public getTopics(): { EVENTS: string } {
     return {
-      USER_EVENTS: this.configService.get<string>('KAFKA_USER_EVENTS_TOPIC', 'user.events'),
+      EVENTS: this.configService.get<string>('KAFKA_EVENTS_TOPIC', 'user.events'),
     };
   }
 }
