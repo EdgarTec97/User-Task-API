@@ -12,6 +12,6 @@ export class TaskFindUseCase {
   ) {}
 
   async execute(pagination: TaskPagination): Promise<Paginated<Task>> {
-    return this.taskRepository.findAll(pagination.toPrimitives());
+    return await this.taskRepository.findAll(pagination.toPrimitives());
   }
 }

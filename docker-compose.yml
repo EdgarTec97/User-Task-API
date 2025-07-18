@@ -46,6 +46,36 @@ services:
       - users-api
     restart: always
 
+  redis:
+    container_name: redis-${PROJECT_NAME}
+    image: bitnami/redis:6.2.7
+    restart: always
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      # - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - redis:/var/lib/redis
+      - redis-config:/usr/local/etc/redis/redis.conf
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+      - users-api
+  redis-commander:
+    container_name: redis-commander-${PROJECT_NAME}
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      REDIS_HOSTS: redis-${PROJECT_NAME}
+      REDIS_HOST: redis-${PROJECT_NAME}
+      REDIS_PORT: redis:${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      HTTP_USER: ${REDIS_COMMANDER_USER}
+      HTTP_PASSWORD: ${REDIS_COMMANDER_PASSWORD}
+    ports:
+      - ${REDIS_COMMANDER_PORT}:8081
+    networks:
+      - users-api
+
 networks:
   users-api:
     driver: bridge
@@ -53,3 +83,5 @@ networks:
 volumes:
   postgres:
   pgadmin:
+  redis:
+  redis-config:
