@@ -46,11 +46,16 @@ jobs:
         image: bitnami/zookeeper:3.9
         env:
           ALLOW_ANONYMOUS_LOGIN: yes
-        ports:
-          - 2181:2181
+        ports: [2181:2181]
+        volumes:
+          - type: tmpfs
+            target: /bitnami/zookeeper/data
         options: >-
-          --health-cmd="echo ruok | nc -w 2 localhost 2181 | grep imok"
-          --health-interval=10s --health-timeout=5s --health-retries=5
+          --health-cmd="echo ruok | nc -w 2 localhost 2181 | grep imok || exit 1"
+          --health-start-period=20s   # wait for JVM
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
       kafka:
         image: bitnami/kafka:3.6.0
         env:
