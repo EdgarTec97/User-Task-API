@@ -68,4 +68,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=10s CMD \
 # ─────────────────────────────────────────────────────────────────────────────
 # Start‑up command: run migrations then the API
 # ─────────────────────────────────────────────────────────────────────────────
+RUN pnpm migrate generate GeneralMigration
 CMD ["sh","-c","pnpm migrate up && node dist/src/main.js"]

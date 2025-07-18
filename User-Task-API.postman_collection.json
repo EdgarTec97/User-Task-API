@@ -1,0 +1,2198 @@
+{
+	"info": {
+		"_postman_id": "0e60e646-1a75-4564-96c2-3a492a310d74",
+		"name": "User Task API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30414678"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jhon Pry 2\",\n    \"email\": \"jhon.pry-2@gmail.com\",\n    \"password\": \"jhon123\",\n    \"role\": \"MEMBER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Edgar Castillo Vega\",\n    \"email\": \"vayne.edgar@gmail.com\",\n    \"password\": \"castillovega01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "15"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"f-VaSQ4oDUiZblZNAEkkN+sX+q3Sg\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 16 Jul 2025 21:17:51 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"ok\"\n}"
+						},
+						{
+							"name": "Wrong Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Edgar Castillo Vega\",\n    \"email\": \"vayne.edgar@gmail.com\",\n    \"password\": \"castillovega01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "85"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"55-B8U14sXoAMnNDFe1hqTpiUNB3EU\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 16 Jul 2025 21:18:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User with this email already exists\",\n    \"error\": \"Conflict\",\n    \"statusCode\": 409\n}"
+						},
+						{
+							"name": "With ADMIN Role",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Admin Root\",\n    \"email\": \"admin@gmail.com\",\n    \"password\": \"admin123\",\n    \"role\": \"ADMIN\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "15"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"f-VaSQ4oDUiZblZNAEkkN+sX+q3Sg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 16:46:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"ok\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = JSON.parse(responseBody);",
+									"if(res.accessToken) {",
+									"    pm.collectionVariables.set('UserToken', res.accessToken);",
+									"}",
+									"if(res.refreshToken) {",
+									"    pm.collectionVariables.set('UserRefreshToken', res.refreshToken);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@gmail.com\",\n    \"password\": \"admin123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"vayne.edgar@gmail.com\",\n    \"password\": \"castillovega01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"login"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1403"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"57b-3OBCyvxqycKA5u5d/ZXF0Aqx2Bs\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 16 Jul 2025 22:03:59 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"accessToken\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MjVkYjM0LWE5YzktNDg3Zi05N2ZjLTZmMzIyYzRlODBhOSIsIm5hbWUiOiJFZGdhciBDYXN0aWxsbyBWZWdhIiwiZW1haWwiOiJ2YXluZS5lZGdhckBnbWFpbC5jb20iLCJyb2xlIjoiTUVNQkVSIiwic3ViIjoiODcyNWRiMzQtYTljOS00ODdmLTk3ZmMtNmYzMjJjNGU4MGE5IiwiaWF0IjoxNzUyNzAzNDM5LCJleHAiOjE3NTI3MDcwMzl9.ZlMLo7bI03In4KYTqEEhYfXNsBTz060kKnDX6JMnobox-6dP3tc5TRuZYsIa478UualGo8bW3l4urSC-QCp82VDeiU3PQYS1x8KPD8q7rEnw2YBm1vOTs4qd6KhOFRFL-cjeplDhfoKb8R3n7IbWqxmDwyqO8yszzwP4L87E-vLxvExMVAQVM8m3Hw0k2V6f7GJ75FQt6-WgmblEPJ9DFlef3Z4G8wFlIBpcbZPazlTnQZd7TtE1a1AZ_CMNGrCK5vXZr4K1Rqk-NmiMx72wpvhhhoFYXoRmm_0aqESGv6WSKlB9bEXY_nQIlVMDpo2TXFKfcd2OLsA1a-vKilAwkg\",\n    \"refreshToken\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MjVkYjM0LWE5YzktNDg3Zi05N2ZjLTZmMzIyYzRlODBhOSIsIm5hbWUiOiJFZGdhciBDYXN0aWxsbyBWZWdhIiwiZW1haWwiOiJ2YXluZS5lZGdhckBnbWFpbC5jb20iLCJhY2Nlc3NUb2tlblJvbGUiOiJNRU1CRVIiLCJyb2xlIjoiUkVGUkVTSF9UT0tFTiIsInN1YiI6Ijg3MjVkYjM0LWE5YzktNDg3Zi05N2ZjLTZmMzIyYzRlODBhOSIsImlhdCI6MTc1MjcwMzQzOSwiZXhwIjoxNzUyNzA3MDM5fQ.dNSOFk4UduxfQ1dIAfOY06w1KqFT6UtVp1Ew72yJIptYdKwAEG9BTCjrymkRo-doevFIzcpo1yjyCMUgKkLwIJyASo1BSrrewUJDgjS8MmG6ys3QCWmdcBLAPLk1zNdWQR7Gy645ODPRuS8ca9jcb6kP_9SFPt8nM_6XH4Rl5DD045k1TKg-5gmzHqoCb_GOnUUxbbwd6rXYb5jHlZ-K_zxNVtaKnhT_FOVT4YFaLMLEmuJZzjf3rOR1_smncw6V90IyWS8s4NSsG0R8tTKi_gzkJebuaEDINJt55KHbaUb4MWbRB3y3A3mv3i8cvcY9mHyxXWmAEkzYUSXD5U2gpA\",\n    \"expirationTime\": \"3600s\"\n}"
+						},
+						{
+							"name": "Wrong Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"vayne.edgar@gmail.com\",\n    \"password\": \"castilloveg01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"login"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4c-z36iTgMY+PalmtQB1QUerFuwoBQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 16 Jul 2025 22:04:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid user password.\",\n    \"error\": \"Unauthorized\",\n    \"statusCode\": 401\n}"
+						}
+					]
+				},
+				{
+					"name": "Find Users (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/user?page=1&pageSize=10&name=&email=",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"user"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "name",
+									"value": ""
+								},
+								{
+									"key": "email",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user?page=1&pageSize=10&name=&email=&role=ADMIN",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "name",
+											"value": ""
+										},
+										{
+											"key": "email",
+											"value": ""
+										},
+										{
+											"key": "role",
+											"value": "ADMIN"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "247"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"f7-Vpl+S4HEgoqjfeN+JrwWmkqL2C4\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 16:27:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"elements\": [\n        {\n            \"id\": \"8725db34-a9c9-487f-97fc-6f322c4e80a9\",\n            \"name\": \"Edgar Castillo Vega\",\n            \"email\": \"vayne.edgar@gmail.com\",\n            \"role\": \"ADMIN\",\n            \"createdAt\": \"2025-07-16T21:17:50.920Z\",\n            \"updatedAt\": \"2025-07-16T21:17:50.920Z\"\n        }\n    ],\n    \"page\": 1,\n    \"pageSize\": 10,\n    \"total\": 1\n}"
+						},
+						{
+							"name": "Wrong Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user?page=1&pageSize=10&name=&email=&role=a",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "name",
+											"value": ""
+										},
+										{
+											"key": "email",
+											"value": ""
+										},
+										{
+											"key": "role",
+											"value": "a"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "125"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"7d-vgN8f6sb772s/FExc/2oviRBQxM\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 16:27:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": [\n        \"role must be one of the following values: MEMBER, ADMIN, REFRESH_TOKEN\"\n    ],\n    \"error\": \"Bad Request\",\n    \"statusCode\": 400\n}"
+						},
+						{
+							"name": "Empty Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user?page=1&pageSize=10&name=&email=&role=MEMBER",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "name",
+											"value": ""
+										},
+										{
+											"key": "email",
+											"value": ""
+										},
+										{
+											"key": "role",
+											"value": "MEMBER"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "48"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"30-qC9pnN8eVoKg+s3W9c5oE7PZ7e4\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 16:27:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"elements\": [],\n    \"page\": 1,\n    \"pageSize\": 10,\n    \"total\": 0\n}"
+						},
+						{
+							"name": "With Incorrect Role",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user?page=1&pageSize=10&name=&email=",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "name",
+											"value": ""
+										},
+										{
+											"key": "email",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "69"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"45-MZJWZc+Y+RUbHpnhz2B2Vipii24\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 16:44:21 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Forbidden resource\",\n    \"error\": \"Forbidden\",\n    \"statusCode\": 403\n}"
+						}
+					]
+				},
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/user/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user/me",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"me"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "183"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b7-8tazH1newD/WzbR4SARmKd5qpOA\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 16:45:56 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"04a7127d-fbd9-4830-a506-93c35f33f6e1\",\n    \"name\": \"Root Vega\",\n    \"email\": \"vega@gmail.com\",\n    \"role\": \"MEMBER\",\n    \"createdAt\": \"2025-07-17T16:43:49.569Z\",\n    \"updatedAt\": \"2025-07-17T16:43:49.569Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User By Id (ADMIN)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/user/04a7127d-fbd9-4830-a506-93c35f33f6e1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"04a7127d-fbd9-4830-a506-93c35f33f6e1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user/04a7127d-fbd9-4830-a506-93c35f33f6e1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"04a7127d-fbd9-4830-a506-93c35f33f6e1"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "183"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b7-8tazH1newD/WzbR4SARmKd5qpOA\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 16:51:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"04a7127d-fbd9-4830-a506-93c35f33f6e1\",\n    \"name\": \"Root Vega\",\n    \"email\": \"vega@gmail.com\",\n    \"role\": \"MEMBER\",\n    \"createdAt\": \"2025-07-17T16:43:49.569Z\",\n    \"updatedAt\": \"2025-07-17T16:43:49.569Z\"\n}"
+						},
+						{
+							"name": "Invalid UUID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user/04a7127d-fbd9-4830-a506-93c35f33f6e",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"04a7127d-fbd9-4830-a506-93c35f33f6e"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "106"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"6a-6mu6TcQVbZYH3C3Fz2r/nKg+qrs\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 16:51:29 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"invalid input syntax for type uuid: \\\"04a7127d-fbd9-4830-a506-93c35f33f6e\\\"\",\n    \"statusCode\": 500\n}"
+						},
+						{
+							"name": "User Not Found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user/04a7127d-fbd9-4830-a506-93c35f33f6ec",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"04a7127d-fbd9-4830-a506-93c35f33f6ec"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "71"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"47-0Kk9mig8cg0mIe3lymCmHrv5lP8\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 16:51:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User does not exist.\",\n    \"error\": \"Not Found\",\n    \"statusCode\": 404\n}"
+						}
+					]
+				},
+				{
+					"name": "Update User By Id (ADMIN)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Member Vega\",\n    \"role\": \"MEMBER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/user/04a7127d-fbd9-4830-a506-93c35f33f6e1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"04a7127d-fbd9-4830-a506-93c35f33f6e1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Member Vega\",\n    \"role\": \"MEMBER\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user/04a7127d-fbd9-4830-a506-93c35f33f6e1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"04a7127d-fbd9-4830-a506-93c35f33f6e1"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "15"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"f-VaSQ4oDUiZblZNAEkkN+sX+q3Sg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 17:11:26 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"ok\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Find User Stats (Task) (ADMIN)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/user/task/stats?page=1&pageSize=10&name=&email=",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"task",
+								"stats"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "name",
+									"value": ""
+								},
+								{
+									"key": "email",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user/task/stats?page=1&pageSize=10&name=&email=",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"task",
+										"stats"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "name",
+											"value": ""
+										},
+										{
+											"key": "email",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "918"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"396-6s7opIuJFxspDre0e2sLTzz6AtQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 21:52:36 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"elements\": [\n        {\n            \"user\": {\n                \"id\": \"def1f339-f6eb-4b16-ab2d-cd1b9e6199b1\",\n                \"name\": \"Roberto Coronado\",\n                \"email\": \"roberto-2@gmail.com\",\n                \"role\": \"MEMBER\"\n            },\n            \"completedTasksCount\": 0,\n            \"totalCompletedTasksCost\": 0\n        },\n        {\n            \"user\": {\n                \"id\": \"8bab4bf9-4f91-4c91-8bb0-a055b79f04c1\",\n                \"name\": \"Admin Root 2\",\n                \"email\": \"admin-2@gmail.com\",\n                \"role\": \"ADMIN\"\n            },\n            \"completedTasksCount\": 0,\n            \"totalCompletedTasksCost\": 0\n        },\n        {\n            \"user\": {\n                \"id\": \"4b6424bc-a477-4909-bd4b-5e648729894b\",\n                \"name\": \"Admin Root\",\n                \"email\": \"admin@gmail.com\",\n                \"role\": \"ADMIN\"\n            },\n            \"completedTasksCount\": 0,\n            \"totalCompletedTasksCost\": 0\n        },\n        {\n            \"user\": {\n                \"id\": \"04a7127d-fbd9-4830-a506-93c35f33f6e1\",\n                \"name\": \"Member Vega\",\n                \"email\": \"vega@gmail.com\",\n                \"role\": \"MEMBER\"\n            },\n            \"completedTasksCount\": 0,\n            \"totalCompletedTasksCost\": 0\n        },\n        {\n            \"user\": {\n                \"id\": \"8725db34-a9c9-487f-97fc-6f322c4e80a9\",\n                \"name\": \"Edgar Castillo Vega\",\n                \"email\": \"vayne.edgar@gmail.com\",\n                \"role\": \"ADMIN\"\n            },\n            \"completedTasksCount\": 0,\n            \"totalCompletedTasksCost\": 0\n        }\n    ],\n    \"page\": 1,\n    \"pageSize\": 10,\n    \"total\": 5\n}"
+						},
+						{
+							"name": "Empty Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user/task/stats?page=1&pageSize=10&name=unde&email=",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"task",
+										"stats"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "name",
+											"value": "unde"
+										},
+										{
+											"key": "email",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "48"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"30-qC9pnN8eVoKg+s3W9c5oE7PZ7e4\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 21:53:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"elements\": [],\n    \"page\": 1,\n    \"pageSize\": 10,\n    \"total\": 0\n}"
+						},
+						{
+							"name": "Wrong Role",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/user/task/stats?page=1&pageSize=10&name=unde&email=",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"task",
+										"stats"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "name",
+											"value": "unde"
+										},
+										{
+											"key": "email",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "69"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"45-MZJWZc+Y+RUbHpnhz2B2Vipii24\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 21:54:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Forbidden resource\",\n    \"error\": \"Forbidden\",\n    \"statusCode\": 403\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Task 4\",\n    \"description\": \"Development Task 3\",\n    \"estimationHours\": 1,\n    \"dueDate\": \"2025-07-23T16:00:00.000Z\",\n    \"status\": \"completed\",\n    \"assignedUsers\": [\n        \"def1f339-f6eb-4b16-ab2d-cd1b9e6199b1\"\n    ],\n    \"cost\": 300\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/task",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"task"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Wrong Role",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/task",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"task"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "69"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"45-MZJWZc+Y+RUbHpnhz2B2Vipii24\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 21:54:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Forbidden resource\",\n    \"error\": \"Forbidden\",\n    \"statusCode\": 403\n}"
+						},
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Task 1\",\n    \"description\": \"Development Task 1\",\n    \"estimationHours\": 5,\n    \"dueDate\": \"2025-07-23T16:00:00.000Z\",\n    \"status\": \"active\",\n    \"assignedUsers\": [],\n    \"cost\": 1550\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/task",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"task"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "15"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"f-VaSQ4oDUiZblZNAEkkN+sX+q3Sg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 21:58:14 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"ok\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Find Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/task?page=1&pageSize=10&title=Task 1&startDate=2025-07-23&endDate=2025-07-24&assignedUser=8bab4bf9-4f91-4c91-8bb0-a055b79f04c1&assignedUserName=admin&assignedUserEmail=2@gmail",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"task"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "title",
+									"value": "Task 1"
+								},
+								{
+									"key": "startDate",
+									"value": "2025-07-23"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-07-24"
+								},
+								{
+									"key": "assignedUser",
+									"value": "8bab4bf9-4f91-4c91-8bb0-a055b79f04c1"
+								},
+								{
+									"key": "assignedUserName",
+									"value": "admin"
+								},
+								{
+									"key": "assignedUserEmail",
+									"value": "2@gmail"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/task?page=1&pageSize=10&title=&dueDate=&assignedUser=&assignedUserName=&assignedUserEmail=",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"task"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "title",
+											"value": ""
+										},
+										{
+											"key": "dueDate",
+											"value": ""
+										},
+										{
+											"key": "assignedUser",
+											"value": ""
+										},
+										{
+											"key": "assignedUserName",
+											"value": ""
+										},
+										{
+											"key": "assignedUserEmail",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "860"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"35c-LLqHQk2mHz05VJzOu8exqoLvW6o\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 22:46:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"elements\": [\n        {\n            \"id\": \"a74f2b9c-85cd-47be-adbe-d811f7e4831d\",\n            \"title\": \"Task 2\",\n            \"description\": \"Design Task 1\",\n            \"estimationHours\": 3,\n            \"dueDate\": \"2025-07-23T16:00:00.000Z\",\n            \"status\": \"active\",\n            \"assignedUsers\": [],\n            \"cost\": 600,\n            \"users\": [],\n            \"createdAt\": \"2025-07-17T22:12:59.167Z\",\n            \"updatedAt\": \"2025-07-17T22:12:59.167Z\"\n        },\n        {\n            \"id\": \"141d66e8-5cb2-4cb4-8b65-f6041c5d1f69\",\n            \"title\": \"Task 1\",\n            \"description\": \"Development Task 1\",\n            \"estimationHours\": 5,\n            \"dueDate\": \"2025-07-23T16:00:00.000Z\",\n            \"status\": \"active\",\n            \"assignedUsers\": [\n                \"def1f339-f6eb-4b16-ab2d-cd1b9e6199b1\"\n            ],\n            \"cost\": 1550,\n            \"users\": [\n                {\n                    \"id\": \"def1f339-f6eb-4b16-ab2d-cd1b9e6199b1\",\n                    \"name\": \"Roberto Coronado\",\n                    \"email\": \"roberto-2@gmail.com\",\n                    \"role\": \"MEMBER\",\n                    \"createdAt\": \"2025-07-17T21:46:09.806Z\",\n                    \"updatedAt\": \"2025-07-17T21:46:09.806Z\"\n                }\n            ],\n            \"createdAt\": \"2025-07-17T21:58:14.389Z\",\n            \"updatedAt\": \"2025-07-17T22:09:24.888Z\"\n        }\n    ],\n    \"page\": 1,\n    \"pageSize\": 10,\n    \"total\": 2\n}"
+						},
+						{
+							"name": "With All Params",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/task?page=1&pageSize=10&title=Task 1&startDate=2025-07-23&endDate=2025-07-24&assignedUser=8bab4bf9-4f91-4c91-8bb0-a055b79f04c1&assignedUserName=admin&assignedUserEmail=2@gmail&status=completed",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"task"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "title",
+											"value": "Task 1"
+										},
+										{
+											"key": "startDate",
+											"value": "2025-07-23"
+										},
+										{
+											"key": "endDate",
+											"value": "2025-07-24"
+										},
+										{
+											"key": "assignedUser",
+											"value": "8bab4bf9-4f91-4c91-8bb0-a055b79f04c1"
+										},
+										{
+											"key": "assignedUserName",
+											"value": "admin"
+										},
+										{
+											"key": "assignedUserEmail",
+											"value": "2@gmail"
+										},
+										{
+											"key": "status",
+											"value": "completed"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "569"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"239-QQWTEgFvCofwjkrT7UWJ3A7uTDg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 23:09:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"elements\": [\n        {\n            \"id\": \"141d66e8-5cb2-4cb4-8b65-f6041c5d1f69\",\n            \"title\": \"Task 1\",\n            \"description\": \"Development Task 1\",\n            \"estimationHours\": 5,\n            \"dueDate\": \"2025-07-23T16:00:00.000Z\",\n            \"status\": \"completed\",\n            \"assignedUsers\": [\n                \"8bab4bf9-4f91-4c91-8bb0-a055b79f04c1\"\n            ],\n            \"cost\": 1550,\n            \"users\": [\n                {\n                    \"id\": \"8bab4bf9-4f91-4c91-8bb0-a055b79f04c1\",\n                    \"name\": \"Admin Root 2\",\n                    \"email\": \"admin-2@gmail.com\",\n                    \"role\": \"ADMIN\",\n                    \"createdAt\": \"2025-07-17T21:34:12.189Z\",\n                    \"updatedAt\": \"2025-07-17T21:34:12.189Z\"\n                }\n            ],\n            \"createdAt\": \"2025-07-17T21:58:14.389Z\",\n            \"updatedAt\": \"2025-07-17T22:53:39.425Z\"\n        }\n    ],\n    \"page\": 1,\n    \"pageSize\": 10,\n    \"total\": 1\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"assignedUsers\": [\n        \"def1f339-f6eb-4b16-ab2d-cd1b9e6199b1\",\n        \"8bab4bf9-4f91-4c91-8bb0-a055b79f04c1\"\n    ],\n    \"title\": \"Task 1\",\n    \"description\": \"Development Task 1\",\n    \"estimationHours\": 5,\n    \"dueDate\": \"2025-07-23T16:00:00.000Z\",\n    \"status\": \"completed\",\n    \"cost\": 1550\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/task/141d66e8-5cb2-4cb4-8b65-f6041c5d1f69",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"141d66e8-5cb2-4cb4-8b65-f6041c5d1f69"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"assignedUsers\": [\n        \"def1f339-f6eb-4b16-ab2d-cd1b9e6199b1\"\n    ],\n    \"title\": \"Task 1\",\n    \"description\": \"Development Task 1\",\n    \"estimationHours\": 5,\n    \"dueDate\": \"2025-07-23T16:00:00.000Z\",\n    \"status\": \"active\",\n    \"cost\": 1550\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/v1/task/141d66e8-5cb2-4cb4-8b65-f6041c5d1f69",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"task",
+										"141d66e8-5cb2-4cb4-8b65-f6041c5d1f69"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "15"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"f-VaSQ4oDUiZblZNAEkkN+sX+q3Sg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 22:06:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"ok\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Remove Task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/task/9adbe7c1-2418-4b8e-b745-49a58b799339",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"9adbe7c1-2418-4b8e-b745-49a58b799339"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/task/9adbe7c1-2418-4b8e-b745-49a58b799339",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"task",
+										"9adbe7c1-2418-4b8e-b745-49a58b799339"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "15"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"f-VaSQ4oDUiZblZNAEkkN+sX+q3Sg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 22:54:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"ok\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Analytics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/task/analytics?startDate=2025-07-17&endDate=2025-07-18",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"analytics"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2025-07-17"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-07-18"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/v1/task/analytics?startDate=2025-07-17&endDate=2025-07-18",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"v1",
+										"task",
+										"analytics"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2025-07-17"
+										},
+										{
+											"key": "endDate",
+											"value": "2025-07-18"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "243"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"f3-qfd3rmRvxgVMfS9WvhkheaDNESc\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Jul 2025 23:50:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"totalTasks\": 3,\n    \"completedTasks\": 2,\n    \"activeTasks\": 1,\n    \"averageEstimationHours\": 3.6666666666666665,\n    \"totalCostCompletedTasks\": 3550,\n    \"totalEstimationHoursCompleted\": 8,\n    \"averageCostPerCompletedTask\": 1775,\n    \"startDate\": \"2025-07-17\",\n    \"endDate\": \"2025-07-18\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{UserToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "UserToken",
+			"value": ""
+		},
+		{
+			"key": "UserRefreshToken",
+			"value": ""
+		}
+	]
+}
