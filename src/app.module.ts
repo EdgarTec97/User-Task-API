@@ -8,6 +8,7 @@ import { AuthModule } from '@/shared/infrastructure/jwt/jwt-service.module';
 import { DatabaseModule } from '@/shared/infrastructure/database/module';
 import { CryptoModule } from '@/shared/infrastructure/encryption/encryption.module';
 import { CacheModule } from '@/shared/infrastructure/cache/cache.module';
+import { BrokerModule } from '@/shared/infrastructure/broker/broker.module';
 import { HttpExceptionFilterLogger } from '@/shared/infrastructure/error-handling/boilerplate/HttpExceptionFilterLogger';
 import { GlobalErrorsInterceptor } from '@/shared/infrastructure/error-handling/boilerplate/GlobalErrorsInterceptor';
 import { DomainToInfrastructureMapper } from '@/shared/infrastructure/error-handling/DomainToInfrastructureMap';
@@ -20,6 +21,7 @@ import { DomainToInfrastructureMapper } from '@/shared/infrastructure/error-hand
     AuthModule,
     DatabaseModule,
     CacheModule,
+    BrokerModule,
     UserModule,
     TaskModule,
   ],

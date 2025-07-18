@@ -1,5 +1,6 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 import { User } from '@/user/v1/infrastructure/entities/user.entity';
 import { Task } from '@/task/v1/infrastructure/entities/task.entity';
@@ -21,8 +22,11 @@ import { UserFindOneUseCase } from '@/user/v1/application/use-cases/user-find-by
 import { UserUpdateUseCase } from '@/user/v1/application/use-cases/user-update.use-case';
 import { UserTaskFindUseCase } from '@/user/v1/application/use-cases/user-task-find.use.case';
 
+import { UserCreatedBrokerPublisher } from '@/user/v1/infrastructure/events/user-created.broker-publisher';
+import { UserCreatedBrokerSubscriber } from '@/user/v1/infrastructure/events/user-created.broker-subscriber';
+
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Task])],
+  imports: [ConfigModule, TypeOrmModule.forFeature([User, Task])],
   controllers: [
     CreateUserController,
     LoginUserController,
@@ -39,6 +43,9 @@ import { UserTaskFindUseCase } from '@/user/v1/application/use-cases/user-task-f
     UserFindOneUseCase,
     UserUpdateUseCase,
     UserTaskFindUseCase,
+    UserCreatedBrokerPublisher,
+    UserCreatedBrokerSubscriber,
+    Logger,
     {
       provide: USER_REPOSITORY,
       useClass: UserTypeOrmRepository,

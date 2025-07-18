@@ -5,6 +5,7 @@ import { UserPassword } from '@/user/v1/domain/user/user.password';
 import { UserEmail } from '@/user/v1/domain/user/user.email';
 import { UserCreatedAt } from '@/user/v1/domain/user/user.createdAt';
 import { UserUpdatedAt } from '@/user/v1/domain/user/user.updatedAt';
+import { UserCreatedEvent } from '@/user/v1/domain/events/user-created.event';
 import { Role } from '@/shared/domain/tokens/Role';
 
 export type UserPrimitives = ReturnType<User['toPrimitives']>;
@@ -32,6 +33,18 @@ export class User extends AggregateRoot {
       new UserCreatedAt(p.createdAt),
       new UserUpdatedAt(p.updatedAt),
     );
+  }
+
+  public buildEvents(): void {
+    const userCreatedEvent = new UserCreatedEvent(
+      this.id.valueOf(),
+      this.getId(),
+      this.getName(),
+      this.getEmail(),
+      this.getRole(),
+      this.getCreatedAt(),
+    );
+    this.record(userCreatedEvent);
   }
 
   public getEmail(): UserEmail {
