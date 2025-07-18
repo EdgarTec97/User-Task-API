@@ -1,9 +1,9 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { KafkaService } from '@/shared/infrastructure/broker/kafka.service';
+import { BROKER_SERVICE_TOKEN, IBrokerService } from '@/shared/domain/broker/broker.service';
 import { KafkaConfigService } from '@/shared/infrastructure/broker/kafka.config';
 import { UserCreatedEventDto } from '@/user/v1/gateway/dtos/events/user-created-event.dto';
-import { EachMessagePayload } from '@/shared/domain/broker/primitives';
+import type { EachMessagePayload } from '@/shared/domain/broker/primitives';
 
 @Injectable()
 export class UserCreatedBrokerSubscriber implements OnModuleInit {
@@ -11,7 +11,8 @@ export class UserCreatedBrokerSubscriber implements OnModuleInit {
   private readonly eventName: string;
 
   constructor(
-    private readonly kafkaService: KafkaService,
+    @Inject(BROKER_SERVICE_TOKEN)
+    private readonly brokerService: IBrokerService,
     private readonly kafkaConfig: KafkaConfigService,
     private readonly logger: Logger,
     readonly config: ConfigService,
@@ -29,7 +30,7 @@ export class UserCreatedBrokerSubscriber implements OnModuleInit {
       const topics: { USER_EVENTS: string } = this.kafkaConfig.getTopics();
 
       // Create topic if it doesn't exist
-      await this.kafkaService.createTopics([
+      await this.brokerService.createTopics([
         {
           topic: topics.USER_EVENTS,
           numPartitions: 3,
@@ -38,7 +39,7 @@ export class UserCreatedBrokerSubscriber implements OnModuleInit {
       ]);
 
       // Subscribe to the topic
-      await this.kafkaService.subscribe(
+      await this.brokerService.subscribe(
         {
           topic: topics.USER_EVENTS,
           groupId: this.CONSUMER_GROUP_ID,

@@ -1,23 +1,10 @@
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Kafka, Producer, Consumer, EachMessagePayload } from 'kafkajs';
 import { KafkaConfigService } from '@/shared/infrastructure/broker/kafka.config';
-
-export interface KafkaMessage {
-  topic: string;
-  key?: string;
-  value: string;
-  headers?: Record<string, string>;
-  partition?: number;
-}
-
-export interface KafkaSubscriptionOptions {
-  topic: string;
-  groupId: string;
-  fromBeginning?: boolean;
-}
+import { IBrokerService, KafkaMessage, KafkaSubscriptionOptions } from '@/shared/domain/broker/broker.service';
 
 @Injectable()
-export class KafkaService implements OnModuleInit, OnModuleDestroy {
+export class KafkaService implements OnModuleInit, OnModuleDestroy, IBrokerService {
   private kafka: Kafka;
   private producer: Producer;
   private consumers: Map<string, Consumer> = new Map();
@@ -26,7 +13,7 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
     private readonly kafkaConfig: KafkaConfigService,
     private readonly logger: Logger,
   ) {
-    this.kafka = new Kafka(this.kafkaConfig.getKafkaConfig());
+    this.kafka = new Kafka(this.kafkaConfig.getBrokerConfig());
     this.producer = this.kafka.producer(this.kafkaConfig.getProducerConfig());
   }
 

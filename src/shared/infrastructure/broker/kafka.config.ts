@@ -6,7 +6,7 @@ import { KafkaConfig, ProducerConfig, ConsumerConfig } from 'kafkajs';
 export class KafkaConfigService {
   constructor(private readonly configService: ConfigService) {}
 
-  getKafkaConfig(): KafkaConfig {
+  getBrokerConfig(): KafkaConfig {
     return {
       clientId: this.configService.get<string>('KAFKA_CLIENT_ID', 'nestjs-app'),
       brokers: this.configService.get<string>('KAFKA_BROKERS', 'localhost:9092').split(','),
@@ -16,6 +16,13 @@ export class KafkaConfigService {
       },
       connectionTimeout: 3000,
       requestTimeout: 30000,
+      // PROD CONFIGURATION
+      // ssl: {
+      //   rejectUnauthorized: false,
+      //   ca: atob(config.trustedCert),
+      //   key: atob(config.clientCertKey),
+      //   cert: atob(config.clientCert),
+      // },
     };
   }
 

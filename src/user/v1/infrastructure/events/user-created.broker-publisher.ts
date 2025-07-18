@@ -1,13 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { KafkaService } from '@/shared/infrastructure/broker/kafka.service';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { KafkaConfigService } from '@/shared/infrastructure/broker/kafka.config';
 import { UserCreatedEvent } from '@/user/v1/domain/events/user-created.event';
 import { UserCreatedEventDto } from '@/user/v1/gateway/dtos/events/user-created-event.dto';
+import { BROKER_SERVICE_TOKEN, IBrokerService } from '@/shared/domain/broker/broker.service';
 
 @Injectable()
 export class UserCreatedBrokerPublisher {
   constructor(
-    private readonly kafkaService: KafkaService,
+    @Inject(BROKER_SERVICE_TOKEN)
+    private readonly brokerService: IBrokerService,
     private readonly kafkaConfig: KafkaConfigService,
     private readonly logger: Logger,
   ) {}
@@ -17,7 +18,7 @@ export class UserCreatedBrokerPublisher {
       const eventDto = UserCreatedEventDto.fromDomain(event);
       const topics = this.kafkaConfig.getTopics();
 
-      await this.kafkaService.publish({
+      await this.brokerService.publish({
         topic: topics.USER_EVENTS,
         key: event.getUserId().valueOf(),
         value: JSON.stringify(eventDto),
