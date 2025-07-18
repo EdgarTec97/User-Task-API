@@ -1,4 +1,5 @@
 import { v4 } from 'uuid';
+import { startOfDay, endOfDay } from 'date-fns';
 
 export class GeneralUtils {
   static uuid(): string {
@@ -30,5 +31,17 @@ export class GeneralUtils {
       T,
       K[number]
     >;
+  }
+
+  static toISO(d: Date): string {
+    return d.toISOString();
+  }
+
+  static startDay(d: string): string {
+    return this.toISO(startOfDay(new Date(d)));
+  }
+
+  static endDay(d: string): string {
+    return this.toISO(endOfDay(new Date(d)));
   }
 }

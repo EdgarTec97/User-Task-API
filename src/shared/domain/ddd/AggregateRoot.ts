@@ -13,5 +13,5 @@ export abstract class AggregateRoot {
     return events;
   }
 
-  abstract toPrimitives(): Record<string, string | number | boolean | undefined>;
+  abstract toPrimitives(): Record<string, string | number | boolean | undefined | object>;
 }

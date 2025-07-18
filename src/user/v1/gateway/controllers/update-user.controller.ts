@@ -10,7 +10,7 @@ import { StatusResponseDTO } from '@/shared/infrastructure/meta/dtos/StatusRespo
 import { Role } from '@/shared/domain/jwt/Role';
 import { GuardWithJwt } from '@/shared/infrastructure/jwt/bootstrap/JwtAuthGuard';
 
-@Controller()
+@Controller({ path: 'api/v1/user', version: '1.0.0' })
 export class UserUpdateController {
   constructor(private readonly useCase: UserUpdateUseCase) {}
 
@@ -30,7 +30,7 @@ export class UserUpdateController {
     type: String,
     required: true,
   })
-  @Patch('api/v1/user/:id')
+  @Patch('/:id')
   @GuardWithJwt([Role.ADMIN])
   async updateUser(@Body() { name, role }: UserUpdateDTO, @Param('id') id: string): Promise<StatusResponseDTO> {
     const userId: UserId = new UserId(id);

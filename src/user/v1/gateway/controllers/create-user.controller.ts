@@ -8,7 +8,7 @@ import { StatusResponseDTO } from '@/shared/infrastructure/meta/dtos/StatusRespo
 import { GeneralUtils } from '@/shared/infrastructure/utils/generate';
 import { Role } from '@/shared/domain/jwt/Role';
 
-@Controller()
+@Controller({ path: 'api/v1/user', version: '1.0.0' })
 export class CreateUserController {
   constructor(private readonly useCase: UserCreateUseCase) {}
 
@@ -22,9 +22,9 @@ export class CreateUserController {
     type: UserDTO,
     description: 'User data to create a record',
   })
-  @Post('api/v1/user')
-  async createUser(@Body() { name, email, password, id, role }: UserDTO): Promise<StatusResponseDTO> {
-    const date = GeneralUtils.currentDate();
+  @Post()
+  async execute(@Body() { name, email, password, id, role }: UserDTO): Promise<StatusResponseDTO> {
+    const date: string = GeneralUtils.currentDate();
     const domain: User = User.fromPrimitives({
       id: id || GeneralUtils.uuid(),
       name,

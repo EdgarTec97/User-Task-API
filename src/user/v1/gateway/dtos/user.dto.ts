@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, IsOptional, IsEnum } from 'class-validator';
+import { IsEmail, IsString, IsOptional, IsEnum, IsUUID } from 'class-validator';
 import { User } from '@/user/v1/domain/user/user';
 import { Role } from '@/shared/domain/jwt/Role';
 
 export class UserDTO {
   @ApiProperty({ example: '6a2afbe5-267a-4de4-8d32-94eed09482cd' })
-  @IsString()
+  @IsUUID('4')
   @IsOptional()
   public id: string;
 

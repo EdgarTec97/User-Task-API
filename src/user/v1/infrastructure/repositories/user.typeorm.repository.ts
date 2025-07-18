@@ -1,17 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, ILike } from 'typeorm';
-import { User } from '@/user/v1/infrastructure/entities/user.entity';
+import { User as UserEntity } from '@/user/v1/infrastructure/entities/user.entity';
+import { Task } from '@/task/v1/infrastructure/entities/task.entity';
 import { UserPrimitives, User as DomainUser } from '@/user/v1/domain/user/user';
 import { IUserRepository } from '@/user/v1/domain/ports/user.repository';
+import { UserTask } from '@/user/v1/domain/user-task/user.task';
 import { UserPaginationPrimitives } from '@/user/v1/domain/pagination/user.pagination';
 import { Paginated } from '@/shared/domain/utils/Paginated';
+import { TaskStatusEnum } from '@/task/v1/domain/task/task.status';
 
 @Injectable()
 export class UserTypeOrmRepository implements IUserRepository {
   constructor(
-    @InjectRepository(User)
-    private readonly ormRepo: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly ormRepo: Repository<UserEntity>,
+    @InjectRepository(Task)
+    private readonly taskRepo: Repository<Task>,
   ) {}
 
   async save(user: UserPrimitives): Promise<void> {
@@ -31,19 +36,70 @@ export class UserTypeOrmRepository implements IUserRepository {
       order: { createdAt: 'DESC' },
     });
 
-    const users: DomainUser[] = items.map((user: User) => this.toDomainUser(user));
+    const users: DomainUser[] = items.map((user: UserEntity) => this.toDomainUser(user));
 
     return new Paginated<DomainUser>(users, page, pageSize, total);
   }
 
+  async findWithTaskStats(params: UserPaginationPrimitives): Promise<Paginated<UserTask>> {
+    const { email, name, role, page, pageSize } = params;
+
+    const completedStatus = TaskStatusEnum.COMPLETED;
+
+    const qb = this.ormRepo
+      .createQueryBuilder('user')
+      .leftJoin('user.tasks', 'task')
+      .select([
+        'user.id          AS id',
+        'user.name        AS name',
+        'user.email       AS email',
+        'user.role        AS role',
+        'user.createdAt   AS createdAt',
+        'user.updatedAt   AS updatedAt',
+        `COUNT(CASE WHEN task.status = :completed THEN 1 END)            AS completedTasksCount`,
+        `COALESCE(SUM(CASE WHEN task.status = :completed THEN task.cost ELSE 0 END),0) AS totalCompletedTasksCost`,
+      ])
+      .setParameter('completed', completedStatus)
+      .groupBy('user.id, user.name, user.email, user.role, user.createdAt, user.updatedAt')
+      .orderBy('user.createdAt', 'DESC')
+      .offset((page - 1) * pageSize)
+      .limit(pageSize);
+
+    if (email) qb.andWhere('user.email = :email', { email });
+    if (name) qb.andWhere('user.name  ILIKE :name', { name: `${name}%` });
+    if (role) qb.andWhere('user.role  = :role', { role });
+
+    const raw = await qb.getRawMany();
+
+    const countQb = this.ormRepo.createQueryBuilder('user');
+    if (email) countQb.andWhere('user.email = :email', { email });
+    if (name) countQb.andWhere('user.name  ILIKE :name', { name: `${name}%` });
+    if (role) countQb.andWhere('user.role  = :role', { role });
+
+    const total = await countQb.getCount();
+
+    const result = raw.map((r) =>
+      UserTask.fromPrimitives({
+        user: r,
+        completedTasksCount: Number(r.completedtaskscount),
+        totalCompletedTasksCost: Number(r.totalcompletedtaskscost),
+      }),
+    );
+
+    return new Paginated(result, page, pageSize, total);
+  }
+
   async findById(id: string): Promise<DomainUser | void> {
-    const user: User | null = await this.ormRepo.findOne({ where: { id } });
+    const user: UserEntity | null = await this.ormRepo.findOne({ where: { id } });
 
     if (user) return this.toDomainUser(user);
   }
 
   async findByEmail(email: string): Promise<DomainUser | void> {
-    const user: User | null = await this.ormRepo.findOne({ where: { email } });
+    const user: UserEntity | null = await this.ormRepo.findOne({
+      where: { email },
+      select: ['id', 'name', 'email', 'password', 'role', 'createdAt', 'updatedAt'],
+    });
     if (user) return this.toDomainUser(user);
   }
 
@@ -55,13 +111,9 @@ export class UserTypeOrmRepository implements IUserRepository {
     await this.ormRepo.delete(id);
   }
 
-  private toDomainUser(user: User): DomainUser {
+  private toDomainUser(user: UserEntity): DomainUser {
     return DomainUser.fromPrimitives({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      role: user.role,
+      ...user,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
     });
